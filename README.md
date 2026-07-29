@@ -45,22 +45,35 @@ Leia antes de alterar produto ou arquitetura:
 - `docs/architecture/overview.md`
 - `docs/architecture/boundaries.md`
 
-## Comandos planejados
+## Comandos disponíveis
 
 ```bash
 pnpm install
-pnpm dev
 pnpm check
 pnpm test
 pnpm build
 
-pnpm infra:up
-pnpm infra:down
+pnpm catalog:normalize <entrada-v1.json> <saida-v2.json>
 
-pnpm db:generate
+cp .env.example .env
+pnpm infra:up
 pnpm db:migrate
 pnpm db:seed
 pnpm db:studio
+pnpm infra:down
 ```
 
-Os scripts serão implementados durante a fundação do monorepo.
+`infra:down` para o container, mas preserva o volume nomeado do PostgreSQL. Não use
+`docker compose down -v` a menos que queira apagar deliberadamente o banco local.
+
+O seed valida `content/editorial/pt-BR/examination-catalog.v2.json` e carrega
+somente conteúdo editorial. Ele substitui a mesma versão enquanto ela for
+rascunho e recusa sobrescrever uma versão publicada.
+
+## Comandos planejados
+
+```bash
+pnpm dev
+```
+
+Os comandos das aplicações serão implementados nos respectivos marcos.

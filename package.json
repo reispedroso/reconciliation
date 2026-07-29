@@ -7,6 +7,13 @@
     "node": ">=24.0.0 <25"
   },
   "scripts": {
+    "catalog:normalize": "node scripts/normalize-editorial-catalog.mjs",
+    "infra:up": "docker compose up -d --wait postgres",
+    "infra:down": "docker compose down",
+    "db:generate": "pnpm --filter @confession/database db:generate",
+    "db:migrate": "pnpm --filter @confession/database db:migrate",
+    "db:seed": "pnpm --filter @confession/contracts build && pnpm --filter @confession/database db:seed",
+    "db:studio": "pnpm --filter @confession/database db:studio",
     "check": "pnpm --recursive --if-present run check",
     "test": "pnpm --recursive --if-present run test",
     "build": "pnpm --recursive --if-present run build"
