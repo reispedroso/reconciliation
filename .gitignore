@@ -1,0 +1,19 @@
+# Contexto local do Codex
+AGENTS.md
+PLANS.md
+docs/plans/
+docs/internal/
+*.private.md
+bootstrap-confession-app.sh
+docs/
+
+# Dependências e artefatos gerados
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Configuração local
+.env
+.env.*
+!.env.example
