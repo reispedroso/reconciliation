@@ -1,4 +1,4 @@
-# Confession App
+# Reconciliation
 
 Aplicação web para auxiliar católicos no exame de consciência e na preparação pessoal para a confissão.
 
