@@ -61,6 +61,10 @@ pnpm db:migrate
 pnpm db:seed
 pnpm db:studio
 pnpm infra:down
+
+pnpm api:dev
+pnpm build
+pnpm api:start
 ```
 
 `infra:down` para o container, mas preserva o volume nomeado do PostgreSQL. Não use
@@ -70,10 +74,21 @@ O seed valida `content/editorial/pt-BR/examination-catalog.v2.json` e carrega
 somente conteúdo editorial. Ele substitui a mesma versão enquanto ela for
 rascunho e recusa sobrescrever uma versão publicada.
 
+A API expõe:
+
+```text
+GET /health
+GET /v1/examination-catalogs/current?locale=pt-BR
+```
+
+O endpoint do catálogo retorna somente uma versão `published`. Enquanto o banco
+possuir apenas o catálogo `0.2.0-draft`, a resposta esperada é
+`404 catalog_not_found`.
+
 ## Comandos planejados
 
 ```bash
-pnpm dev
+pnpm web:dev
 ```
 
-Os comandos das aplicações serão implementados nos respectivos marcos.
+Os comandos da aplicação web serão implementados no respectivo marco.

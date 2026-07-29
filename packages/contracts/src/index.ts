@@ -1,8 +1,16 @@
 export {
+  apiErrorSchema,
+  currentExaminationCatalogQuerySchema,
   examinationCatalogSchema,
+  healthResponseSchema,
+  publishedExaminationCatalogSchema,
+  type ApiError,
   type AffirmativeOption,
+  type CurrentExaminationCatalogQuery,
   type DenialOption,
   type ExaminationCatalog,
   type ExaminationCatalogQuestion,
   type ExaminationOption,
+  type HealthResponse,
+  type PublishedExaminationCatalog,
 } from "./examinations/examination-catalog.js";

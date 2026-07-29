@@ -7,6 +7,8 @@
     "node": ">=24.0.0 <25"
   },
   "scripts": {
+    "api:dev": "pnpm --filter @confession/contracts build && pnpm --filter @confession/database build && pnpm --filter @confession/api dev",
+    "api:start": "pnpm --filter @confession/api start",
     "catalog:normalize": "node scripts/normalize-editorial-catalog.mjs",
     "infra:up": "docker compose up -d --wait postgres",
     "infra:down": "docker compose down",

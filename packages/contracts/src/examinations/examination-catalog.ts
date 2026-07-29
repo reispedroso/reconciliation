@@ -137,6 +137,121 @@ function addPositionIssues(
   });
 }
 
+interface CatalogForRefinement {
+  doctrinalSources: ReadonlyArray<{ code: string }>;
+  questions: ReadonlyArray<z.infer<typeof questionSchema>>;
+}
+
+function addCatalogIssues(
+  catalog: CatalogForRefinement,
+  context: z.core.$RefinementCtx,
+): void {
+  addUniqueCodeIssues(
+    catalog.questions.map(({ code }) => code),
+    ["questions"],
+    context,
+  );
+  addPositionIssues(
+    catalog.questions.map(({ position }) => position),
+    ["questions"],
+    context,
+  );
+
+  const sourceCodes = catalog.doctrinalSources.map(({ code }) => code);
+  addUniqueCodeIssues(sourceCodes, ["doctrinalSources"], context);
+  const sourceCodeSet = new Set(sourceCodes);
+
+  catalog.questions.forEach((question, questionIndex) => {
+    addUniqueCodeIssues(
+      question.options.map(({ code }) => code),
+      ["questions", questionIndex, "options"],
+      context,
+    );
+    addPositionIssues(
+      question.options.map(({ position }) => position),
+      ["questions", questionIndex, "options"],
+      context,
+    );
+
+    const denialCount = question.options.filter(
+      ({ responseKind }) => responseKind === "denial",
+    ).length;
+
+    if (denialCount !== 1) {
+      context.addIssue({
+        code: "custom",
+        message: "Each question must have exactly one denial option.",
+        path: ["questions", questionIndex, "options"],
+      });
+    }
+
+    question.options.forEach((option, optionIndex) => {
+      if (option.responseKind !== "affirmation") {
+        return;
+      }
+
+      addUniqueCodeIssues(
+        option.followUpPrompts.map(({ code }) => code),
+        [
+          "questions",
+          questionIndex,
+          "options",
+          optionIndex,
+          "followUpPrompts",
+        ],
+        context,
+      );
+      addPositionIssues(
+        option.followUpPrompts.map(({ position }) => position),
+        [
+          "questions",
+          questionIndex,
+          "options",
+          optionIndex,
+          "followUpPrompts",
+        ],
+        context,
+      );
+
+      if (
+        option.objectiveMatter.classification ===
+          "grave_when_conditions_met" &&
+        option.followUpPrompts.length === 0
+      ) {
+        context.addIssue({
+          code: "custom",
+          message:
+            "Conditional grave matter requires at least one follow-up prompt.",
+          path: [
+            "questions",
+            questionIndex,
+            "options",
+            optionIndex,
+            "followUpPrompts",
+          ],
+        });
+      }
+
+      option.doctrinalSourceCodes.forEach((sourceCode, sourceIndex) => {
+        if (!sourceCodeSet.has(sourceCode)) {
+          context.addIssue({
+            code: "custom",
+            message: `Unknown doctrinal source code: ${sourceCode}`,
+            path: [
+              "questions",
+              questionIndex,
+              "options",
+              optionIndex,
+              "doctrinalSourceCodes",
+              sourceIndex,
+            ],
+          });
+        }
+      });
+    });
+  });
+}
+
 export const examinationCatalogSchema = z
   .strictObject({
     schemaVersion: z.literal("2.0.0"),
@@ -164,112 +279,43 @@ export const examinationCatalogSchema = z
     doctrinalSources: z.array(doctrinalSourceSchema).min(1),
     questions: z.array(questionSchema).min(1),
   })
-  .superRefine((catalog, context) => {
-    addUniqueCodeIssues(
-      catalog.questions.map(({ code }) => code),
-      ["questions"],
-      context,
-    );
-    addPositionIssues(
-      catalog.questions.map(({ position }) => position),
-      ["questions"],
-      context,
-    );
+  .superRefine(addCatalogIssues);
 
-    const sourceCodes = catalog.doctrinalSources.map(({ code }) => code);
-    addUniqueCodeIssues(sourceCodes, ["doctrinalSources"], context);
-    const sourceCodeSet = new Set(sourceCodes);
+export const currentExaminationCatalogQuerySchema = z.strictObject({
+  locale: z.literal("pt-BR"),
+});
 
-    catalog.questions.forEach((question, questionIndex) => {
-      addUniqueCodeIssues(
-        question.options.map(({ code }) => code),
-        ["questions", questionIndex, "options"],
-        context,
-      );
-      addPositionIssues(
-        question.options.map(({ position }) => position),
-        ["questions", questionIndex, "options"],
-        context,
-      );
+export const publishedExaminationCatalogSchema = z
+  .strictObject({
+    schemaVersion: z.literal("2.0.0"),
+    catalogVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
+    locale: z.literal("pt-BR"),
+    title: z.string().min(1),
+    purpose: z.string().min(1),
+    globalNotice: z.string().min(1),
+    mortalSinResultMessage: z.string().min(1),
+    reviewedAt: z.string().datetime({ offset: true }),
+    publishedAt: z.string().datetime({ offset: true }),
+    assessment: z.strictObject({
+      fullKnowledge: assessmentQuestionSchema,
+      deliberateConsent: assessmentQuestionSchema,
+      limitations: limitationsSchema,
+    }),
+    doctrinalSources: z.array(doctrinalSourceSchema).min(1),
+    questions: z.array(questionSchema).min(1),
+  })
+  .superRefine(addCatalogIssues);
 
-      const denialCount = question.options.filter(
-        ({ responseKind }) => responseKind === "denial",
-      ).length;
+export const apiErrorSchema = z.strictObject({
+  error: z.strictObject({
+    code: z.enum(["invalid_request", "catalog_not_found", "internal_error"]),
+    message: z.string().min(1),
+  }),
+});
 
-      if (denialCount !== 1) {
-        context.addIssue({
-          code: "custom",
-          message: "Each question must have exactly one denial option.",
-          path: ["questions", questionIndex, "options"],
-        });
-      }
-
-      question.options.forEach((option, optionIndex) => {
-        if (option.responseKind !== "affirmation") {
-          return;
-        }
-
-        addUniqueCodeIssues(
-          option.followUpPrompts.map(({ code }) => code),
-          [
-            "questions",
-            questionIndex,
-            "options",
-            optionIndex,
-            "followUpPrompts",
-          ],
-          context,
-        );
-        addPositionIssues(
-          option.followUpPrompts.map(({ position }) => position),
-          [
-            "questions",
-            questionIndex,
-            "options",
-            optionIndex,
-            "followUpPrompts",
-          ],
-          context,
-        );
-
-        if (
-          option.objectiveMatter.classification ===
-            "grave_when_conditions_met" &&
-          option.followUpPrompts.length === 0
-        ) {
-          context.addIssue({
-            code: "custom",
-            message:
-              "Conditional grave matter requires at least one follow-up prompt.",
-            path: [
-              "questions",
-              questionIndex,
-              "options",
-              optionIndex,
-              "followUpPrompts",
-            ],
-          });
-        }
-
-        option.doctrinalSourceCodes.forEach((sourceCode, sourceIndex) => {
-          if (!sourceCodeSet.has(sourceCode)) {
-            context.addIssue({
-              code: "custom",
-              message: `Unknown doctrinal source code: ${sourceCode}`,
-              path: [
-                "questions",
-                questionIndex,
-                "options",
-                optionIndex,
-                "doctrinalSourceCodes",
-                sourceIndex,
-              ],
-            });
-          }
-        });
-      });
-    });
-  });
+export const healthResponseSchema = z.strictObject({
+  status: z.literal("ok"),
+});
 
 export type ExaminationCatalog = z.infer<typeof examinationCatalogSchema>;
 export type ExaminationCatalogQuestion = ExaminationCatalog["questions"][number];
@@ -282,3 +328,11 @@ export type DenialOption = Extract<
   ExaminationOption,
   { responseKind: "denial" }
 >;
+export type CurrentExaminationCatalogQuery = z.infer<
+  typeof currentExaminationCatalogQuerySchema
+>;
+export type PublishedExaminationCatalog = z.infer<
+  typeof publishedExaminationCatalogSchema
+>;
+export type ApiError = z.infer<typeof apiErrorSchema>;
+export type HealthResponse = z.infer<typeof healthResponseSchema>;

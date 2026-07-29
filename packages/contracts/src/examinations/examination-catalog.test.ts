@@ -2,7 +2,11 @@ import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
-import { examinationCatalogSchema } from "./examination-catalog.js";
+import {
+  currentExaminationCatalogQuerySchema,
+  examinationCatalogSchema,
+  publishedExaminationCatalogSchema,
+} from "./examination-catalog.js";
 
 const catalogUrl = new URL(
   "../../../../content/editorial/pt-BR/examination-catalog.v2.json",
@@ -23,6 +27,36 @@ describe("examination catalog contract", () => {
     expect(
       options.filter(({ responseKind }) => responseKind === "denial"),
     ).toHaveLength(9);
+  });
+
+  it("validates a public published catalog without seed metadata", () => {
+    const {
+      editorial: _editorial,
+      sourceArtifact: _sourceArtifact,
+      ...catalogContent
+    } = catalog;
+    const publishedCatalog = {
+      ...catalogContent,
+      catalogVersion: "0.2.0",
+      reviewedAt: "2026-07-29T12:00:00.000Z",
+      publishedAt: "2026-07-29T13:00:00.000Z",
+    };
+
+    expect(
+      publishedExaminationCatalogSchema.safeParse(publishedCatalog).success,
+    ).toBe(true);
+    expect("sourceArtifact" in publishedCatalog).toBe(false);
+  });
+
+  it("accepts only the supported public locale", () => {
+    expect(
+      currentExaminationCatalogQuerySchema.safeParse({ locale: "pt-BR" })
+        .success,
+    ).toBe(true);
+    expect(
+      currentExaminationCatalogQuerySchema.safeParse({ locale: "en-US" })
+        .success,
+    ).toBe(false);
   });
 
   it("keeps every conditional prompt explicitly pending rule mapping", () => {
