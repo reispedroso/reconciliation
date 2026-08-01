@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import {
   examinationCatalogSchema,
   publishedExaminationCatalogSchema,
-} from "@confession/contracts";
+} from "@addiopeccati/contracts";
 import { describe, expect, it } from "vitest";
 
 import {

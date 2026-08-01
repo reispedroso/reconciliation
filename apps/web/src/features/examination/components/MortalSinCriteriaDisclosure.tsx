@@ -1,4 +1,4 @@
-import type { DraftExaminationCatalogPreview } from "@confession/contracts";
+import type { DraftExaminationCatalogPreview } from "@addiopeccati/contracts";
 
 type DoctrinalSource =
   DraftExaminationCatalogPreview["doctrinalSources"][number];

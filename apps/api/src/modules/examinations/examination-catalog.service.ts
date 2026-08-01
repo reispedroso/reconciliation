@@ -3,7 +3,7 @@ import type {
   DraftExaminationCatalogPreview,
   DraftExaminationCatalogPreviewQuery,
   PublishedExaminationCatalog,
-} from "@confession/contracts";
+} from "@addiopeccati/contracts";
 
 export interface PublishedExaminationCatalogRepository {
   findCurrentPublishedByLocale(

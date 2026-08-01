@@ -4,12 +4,12 @@ import { resolve } from "node:path";
 import {
   draftExaminationCatalogPreviewSchema,
   examinationCatalogSchema,
-} from "@confession/contracts";
+} from "@addiopeccati/contracts";
 import { describe, expect, it, vi } from "vitest";
 
 import { fetchDraftCatalog } from "../api/fetchDraftCatalog.js";
 
-const catalogCacheKey = "confession-app:editorial-catalog:0.3.0-draft";
+const catalogCacheKey = "addiopeccati:editorial-catalog:0.3.0-draft";
 const catalogPath = resolve(
   process.cwd(),
   "../../content/editorial/pt-BR/examination-catalog.v3.json",

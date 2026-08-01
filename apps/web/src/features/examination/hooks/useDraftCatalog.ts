@@ -1,4 +1,4 @@
-import type { DraftExaminationCatalogPreview } from "@confession/contracts";
+import type { DraftExaminationCatalogPreview } from "@addiopeccati/contracts";
 import { useEffect, useState } from "react";
 
 import { fetchDraftCatalog } from "../api/fetchDraftCatalog.js";

@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 import {
   draftExaminationCatalogPreviewSchema,
   examinationCatalogSchema,
-} from "@confession/contracts";
+} from "@addiopeccati/contracts";
 import { render, screen, within } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";

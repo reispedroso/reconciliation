@@ -1,12 +1,12 @@
 import type {
   DraftExaminationCatalogPreview,
   ExaminationCatalogQuestion,
-} from "@confession/contracts";
+} from "@addiopeccati/contracts";
 import {
   isOptionDisabled,
   selectOption,
   type ExaminationQuestionDefinition,
-} from "@confession/domain";
+} from "@addiopeccati/domain";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useExaminationSession } from "../state/useExaminationSession.js";

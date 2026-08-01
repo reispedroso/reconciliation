@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import {
   examinationCatalogSchema,
   type ExaminationCatalog,
-} from "@confession/contracts";
+} from "@addiopeccati/contracts";
 import { and, eq } from "drizzle-orm";
 
 import type { Database } from "../client.js";

@@ -1,4 +1,4 @@
-import { apiErrorSchema } from "@confession/contracts";
+import { apiErrorSchema } from "@addiopeccati/contracts";
 import cors from "@fastify/cors";
 import Fastify, { type FastifyInstance } from "fastify";
 

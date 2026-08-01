@@ -10,10 +10,10 @@ importers:
 
   apps/api:
     dependencies:
-      '@confession/contracts':
+      '@addiopeccati/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
-      '@confession/database':
+      '@addiopeccati/database':
         specifier: workspace:*
         version: link:../../packages/database
       '@fastify/cors':
@@ -41,10 +41,10 @@ importers:
 
   apps/web:
     dependencies:
-      '@confession/contracts':
+      '@addiopeccati/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
-      '@confession/domain':
+      '@addiopeccati/domain':
         specifier: workspace:*
         version: link:../../packages/domain
       '@fontsource-variable/eb-garamond':
@@ -115,7 +115,7 @@ importers:
 
   packages/database:
     dependencies:
-      '@confession/contracts':
+      '@addiopeccati/contracts':
         specifier: workspace:*
         version: link:../contracts
       drizzle-orm:

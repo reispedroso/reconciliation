@@ -1,4 +1,4 @@
-import { healthResponseSchema } from "@confession/contracts";
+import { healthResponseSchema } from "@addiopeccati/contracts";
 import type { FastifyPluginAsync } from "fastify";
 
 export const healthRoutes: FastifyPluginAsync = async (app) => {

@@ -3,7 +3,7 @@ import {
   draftExaminationCatalogPreviewQuerySchema,
   draftExaminationCatalogPreviewSchema,
   type ApiError,
-} from "@confession/contracts";
+} from "@addiopeccati/contracts";
 import type { FastifyPluginAsync } from "fastify";
 
 import {

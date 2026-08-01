@@ -1,4 +1,4 @@
-import { createDatabase } from "@confession/database";
+import { createDatabase } from "@addiopeccati/database";
 
 import { buildApp } from "./app.js";
 import { isDraftPreviewEnabled } from "./config/draft-preview.js";

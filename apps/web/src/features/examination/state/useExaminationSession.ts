@@ -1,4 +1,4 @@
-import type { DraftExaminationCatalogPreview } from "@confession/contracts";
+import type { DraftExaminationCatalogPreview } from "@addiopeccati/contracts";
 import {
   useCallback,
   useEffect,
@@ -8,7 +8,7 @@ import {
   type SetStateAction,
 } from "react";
 
-const examinationSessionKey = "confession-app:examination-session:v1";
+const examinationSessionKey = "addiopeccati:examination-session:v1";
 
 export interface ExaminationSessionState {
   activeQuestionCode: string;

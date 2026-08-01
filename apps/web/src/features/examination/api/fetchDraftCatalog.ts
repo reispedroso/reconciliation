@@ -2,11 +2,11 @@ import {
   apiErrorSchema,
   draftExaminationCatalogPreviewSchema,
   type DraftExaminationCatalogPreview,
-} from "@confession/contracts";
+} from "@addiopeccati/contracts";
 
 const apiUrl =
   import.meta.env["VITE_API_URL"] ?? "http://127.0.0.1:3000";
-const catalogCacheKey = "confession-app:editorial-catalog:0.3.0-draft";
+const catalogCacheKey = "addiopeccati:editorial-catalog:0.3.0-draft";
 
 function readCachedCatalog(): DraftExaminationCatalogPreview | null {
   try {

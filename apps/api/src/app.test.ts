@@ -6,7 +6,7 @@ import {
   publishedExaminationCatalogSchema,
   type DraftExaminationCatalogPreview,
   type PublishedExaminationCatalog,
-} from "@confession/contracts";
+} from "@addiopeccati/contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { buildApp } from "./app.js";

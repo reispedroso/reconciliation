@@ -3,7 +3,7 @@ import {
   publishedExaminationCatalogSchema,
   type DraftExaminationCatalogPreview,
   type PublishedExaminationCatalog,
-} from "@confession/contracts";
+} from "@addiopeccati/contracts";
 
 export interface PublishedCatalogRecord {
   catalog: {

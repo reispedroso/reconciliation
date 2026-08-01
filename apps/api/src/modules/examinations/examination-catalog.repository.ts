@@ -1,7 +1,7 @@
 import type {
   CurrentExaminationCatalogQuery,
   DraftExaminationCatalogPreviewQuery,
-} from "@confession/contracts";
+} from "@addiopeccati/contracts";
 import {
   assessmentAnswers,
   assessmentQuestions,
@@ -14,7 +14,7 @@ import {
   optionDoctrinalSources,
   optionFollowUpPrompts,
   type Database,
-} from "@confession/database";
+} from "@addiopeccati/database";
 import { and, asc, desc, eq } from "drizzle-orm";
 
 import {

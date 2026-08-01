@@ -1,5 +1,5 @@
 {
-  "name": "confession-app",
+  "name": "addiopeccati",
   "version": "0.0.0",
   "private": true,
   "packageManager": "pnpm@11.17.0",
@@ -7,18 +7,18 @@
     "node": ">=24.0.0 <25"
   },
   "scripts": {
-    "dev": "pnpm --filter @confession/contracts build && pnpm --filter @confession/domain build && pnpm --filter @confession/database build && pnpm --parallel --stream --filter @confession/api --filter @confession/web run dev",
-    "api:dev": "pnpm --filter @confession/contracts build && pnpm --filter @confession/database build && pnpm --filter @confession/api dev",
-    "api:start": "pnpm --filter @confession/api start",
-    "web:dev": "pnpm --filter @confession/contracts build && pnpm --filter @confession/domain build && pnpm --filter @confession/web dev",
+    "dev": "pnpm --filter @addiopeccati/contracts build && pnpm --filter @addiopeccati/domain build && pnpm --filter @addiopeccati/database build && pnpm --parallel --stream --filter @addiopeccati/api --filter @addiopeccati/web run dev",
+    "api:dev": "pnpm --filter @addiopeccati/contracts build && pnpm --filter @addiopeccati/database build && pnpm --filter @addiopeccati/api dev",
+    "api:start": "pnpm --filter @addiopeccati/api start",
+    "web:dev": "pnpm --filter @addiopeccati/contracts build && pnpm --filter @addiopeccati/domain build && pnpm --filter @addiopeccati/web dev",
     "catalog:normalize": "node scripts/normalize-editorial-catalog.mjs",
     "catalog:map-rules": "node scripts/map-editorial-rules.mjs",
     "infra:up": "docker compose up -d --wait postgres",
     "infra:down": "docker compose down",
-    "db:generate": "pnpm --filter @confession/database db:generate",
-    "db:migrate": "pnpm --filter @confession/database db:migrate",
-    "db:seed": "pnpm --filter @confession/contracts build && pnpm --filter @confession/database db:seed",
-    "db:studio": "pnpm --filter @confession/database db:studio",
+    "db:generate": "pnpm --filter @addiopeccati/database db:generate",
+    "db:migrate": "pnpm --filter @addiopeccati/database db:migrate",
+    "db:seed": "pnpm --filter @addiopeccati/contracts build && pnpm --filter @addiopeccati/database db:seed",
+    "db:studio": "pnpm --filter @addiopeccati/database db:studio",
     "check": "pnpm --recursive --if-present run check",
     "test": "pnpm --recursive --if-present run test",
     "build": "pnpm --recursive --if-present run build"

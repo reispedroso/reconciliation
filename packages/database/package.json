@@ -1,5 +1,5 @@
 {
-  "name": "@confession/database",
+  "name": "@addiopeccati/database",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -25,7 +25,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@confession/contracts": "workspace:*",
+    "@addiopeccati/contracts": "workspace:*",
     "drizzle-orm": "^0.45.2",
     "postgres": "^3.4.9"
   },
