@@ -13,7 +13,7 @@ export function HomePage() {
         </p>
         <div className="hero-actions">
           <Link className="primary-link" to="/preview">
-            Abrir prévia do exame
+            Iniciar exame de consciência
           </Link>
         </div>
       </header>
@@ -23,7 +23,7 @@ export function HomePage() {
           <p className="section-number">01</p>
           <h2 id="principles-title">Privado por arquitetura</h2>
           <p>
-            Suas marcações ficam somente nesta página. Esta versão não envia
+            Suas marcações ficam somente nesta aba. Esta versão não envia
             respostas, observações ou progresso para o servidor.
           </p>
         </div>
@@ -47,4 +47,3 @@ export function HomePage() {
     </main>
   );
 }
-

@@ -47,6 +47,15 @@ importers:
       '@confession/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@fontsource-variable/eb-garamond':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/cinzel':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/poppins':
+        specifier: ^5.3.0
+        version: 5.3.0
       react:
         specifier: ^19.2.8
         version: 19.2.8
@@ -702,6 +711,15 @@ packages:
 
   '@fastify/proxy-addr@5.1.0':
     resolution: {integrity: sha512-INS+6gh91cLUjB+PVHfu1UqcB76Sqtpyp7bnL+FYojhjygvOPA9ctiD/JDKsyD9Xgu4hUhCSJBPig/w7duNajw==}
+
+  '@fontsource-variable/eb-garamond@5.3.0':
+    resolution: {integrity: sha512-656OJsA9Vv24yhqRZFEzXnzS2AYgKdEILLgHJYLzzXndgcWFKfSXFqzbRI5/6Yk1Yt7UfWrUeppE5nRQPQMwlQ==}
+
+  '@fontsource/cinzel@5.3.0':
+    resolution: {integrity: sha512-KEOYTsrRppW0uRIPWBDPrQgunCS6f8u4nzZxYRBfo9SCknKojLYjK7B0ZoVmJhyVLefz271ZQRF9EOpHZlfhRw==}
+
+  '@fontsource/poppins@5.3.0':
+    resolution: {integrity: sha512-cms1nM7U6SN8epIV1WMVOV8VsA645aSm3wHfzIQnkk188U341ThbJGSl2Sv54V29gnDbT2arMPfLzvVIIVCceQ==}
 
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
@@ -2094,6 +2112,12 @@ snapshots:
     dependencies:
       '@fastify/forwarded': 3.0.2
       ipaddr.js: 2.4.0
+
+  '@fontsource-variable/eb-garamond@5.3.0': {}
+
+  '@fontsource/cinzel@5.3.0': {}
+
+  '@fontsource/poppins@5.3.0': {}
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
 

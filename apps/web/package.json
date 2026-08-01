@@ -12,6 +12,9 @@
   "dependencies": {
     "@confession/contracts": "workspace:*",
     "@confession/domain": "workspace:*",
+    "@fontsource/cinzel": "^5.3.0",
+    "@fontsource/poppins": "^5.3.0",
+    "@fontsource-variable/eb-garamond": "^5.3.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.2"

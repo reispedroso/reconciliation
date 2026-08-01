@@ -19,7 +19,7 @@ export function ExaminationPreviewPage() {
         <h1>Exame de consciência</h1>
         <p>
           Percorra os grupos e teste a estrutura editorial. Suas marcações
-          existem apenas na memória desta página.
+          ficam somente nesta aba e podem ser apagadas a qualquer momento.
         </p>
       </header>
 
@@ -58,4 +58,3 @@ export function ExaminationPreviewPage() {
     </main>
   );
 }
-
