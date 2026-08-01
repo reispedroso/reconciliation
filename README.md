@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Reconciliation — Confession App
+=======
+# addiopeccati
+>>>>>>> cbb077e (name change)
 
 Aplicação web católica para auxiliar o exame de consciência e a preparação
 pessoal para a confissão.
