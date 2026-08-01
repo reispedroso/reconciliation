@@ -13,7 +13,7 @@ import {
 
 function createRecord(): PublishedCatalogRecord {
   const catalogUrl = new URL(
-    "../../../../../content/editorial/pt-BR/examination-catalog.v2.json",
+    "../../../../../content/editorial/pt-BR/examination-catalog.v3.json",
     import.meta.url,
   );
   const draft = examinationCatalogSchema.parse(
@@ -50,16 +50,72 @@ function createRecord(): PublishedCatalogRecord {
           disableAffirmativeOptionsWhileSelected: null,
           objectiveMatterClassification:
             option.objectiveMatter.classification,
+          objectiveMatterOperator:
+            option.objectiveMatter.classification ===
+            "grave_when_conditions_met"
+              ? option.objectiveMatter.operator
+              : null,
           summaryIncludeWhen: option.summary.includeWhen,
           summaryPdfText: option.summary.pdfText,
           summaryAskQuantity: option.summary.askQuantity,
           summaryAskFrequency: option.summary.askFrequency,
           summaryBehavior: null,
         });
+        if (
+          option.objectiveMatter.classification ===
+          "grave_when_conditions_met"
+        ) {
+          followUpPrompts.push(
+            ...option.objectiveMatter.conditions.map((prompt) => ({
+              optionId,
+              code: prompt.code,
+              position: prompt.position,
+              prompt: prompt.prompt,
+              ruleStatus: "mapped" as const,
+              kind: "objective_condition" as const,
+              answerKind: prompt.answerKind,
+              requiredAnswer: prompt.requiredAnswer,
+              effect: null,
+              inputKind: null,
+            })),
+          );
+        }
         followUpPrompts.push(
-          ...option.followUpPrompts.map((prompt) => ({
+          ...option.conductConfirmationPrompts.map((prompt) => ({
             optionId,
-            ...prompt,
+            code: prompt.code,
+            position: prompt.position,
+            prompt: prompt.prompt,
+            ruleStatus: "mapped" as const,
+            kind: "conduct_confirmation" as const,
+            answerKind: prompt.answerKind,
+            requiredAnswer: prompt.requiredAnswer,
+            effect: null,
+            inputKind: null,
+          })),
+          ...option.consentConsiderations.map((prompt) => ({
+            optionId,
+            code: prompt.code,
+            position: prompt.position,
+            prompt: prompt.prompt,
+            ruleStatus: "mapped" as const,
+            kind: "consent_consideration" as const,
+            answerKind: prompt.answerKind,
+            requiredAnswer: null,
+            effect: prompt.effect,
+            inputKind: null,
+          })),
+          ...option.localDetailPrompts.map((prompt) => ({
+            optionId,
+            code: prompt.code,
+            position: prompt.position,
+            prompt: prompt.prompt,
+            ruleStatus: "mapped" as const,
+            kind: "local_detail" as const,
+            answerKind: null,
+            requiredAnswer: null,
+            effect: null,
+            inputKind: prompt.inputKind,
           })),
         );
         optionSourceLinks.push(
@@ -82,6 +138,7 @@ function createRecord(): PublishedCatalogRecord {
           disableAffirmativeOptionsWhileSelected:
             option.disableAffirmativeOptionsWhileSelected,
           objectiveMatterClassification: null,
+          objectiveMatterOperator: null,
           summaryIncludeWhen: null,
           summaryPdfText: null,
           summaryAskQuantity: null,
@@ -101,7 +158,7 @@ function createRecord(): PublishedCatalogRecord {
     catalog: {
       id: 1,
       schemaVersion: draft.schemaVersion,
-      catalogVersion: "0.2.0",
+      catalogVersion: "0.3.0",
       locale: draft.locale,
       title: draft.title,
       purpose: draft.purpose,
@@ -138,10 +195,9 @@ function createRecord(): PublishedCatalogRecord {
       prompt: draft.assessment.limitations.prompt,
       note: draft.assessment.limitations.note,
       ruleStatus: draft.assessment.limitations.ruleStatus,
+      askBefore: draft.assessment.limitations.askBefore,
+      effect: draft.assessment.limitations.effect,
     },
-    limitationTriggers: draft.assessment.limitations.askWhen.map(
-      (trigger, position) => ({ position, ...trigger }),
-    ),
     limitationOptions: draft.assessment.limitations.options.map(
       (option, position) => ({ position, ...option }),
     ),
@@ -157,7 +213,7 @@ describe("published examination catalog mapper", () => {
       true,
     );
     expect(catalog.questions).toHaveLength(9);
-    expect(options).toHaveLength(74);
+    expect(options).toHaveLength(76);
     expect(catalog.doctrinalSources).toHaveLength(7);
     expect("id" in catalog).toBe(false);
     expect("sourceArtifact" in catalog).toBe(false);
@@ -180,4 +236,3 @@ describe("published examination catalog mapper", () => {
     );
   });
 });
-

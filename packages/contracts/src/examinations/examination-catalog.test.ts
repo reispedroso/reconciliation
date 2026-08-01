@@ -9,7 +9,7 @@ import {
 } from "./examination-catalog.js";
 
 const catalogUrl = new URL(
-  "../../../../content/editorial/pt-BR/examination-catalog.v2.json",
+  "../../../../content/editorial/pt-BR/examination-catalog.v3.json",
   import.meta.url,
 );
 const catalogText = readFileSync(catalogUrl, "utf8");
@@ -20,10 +20,10 @@ describe("examination catalog contract", () => {
     const options = catalog.questions.flatMap(({ options }) => options);
 
     expect(catalog.questions).toHaveLength(9);
-    expect(options).toHaveLength(74);
+    expect(options).toHaveLength(76);
     expect(
       options.filter(({ responseKind }) => responseKind === "affirmation"),
-    ).toHaveLength(65);
+    ).toHaveLength(67);
     expect(
       options.filter(({ responseKind }) => responseKind === "denial"),
     ).toHaveLength(9);
@@ -37,7 +37,7 @@ describe("examination catalog contract", () => {
     } = catalog;
     const publishedCatalog = {
       ...catalogContent,
-      catalogVersion: "0.2.0",
+      catalogVersion: "0.3.0",
       reviewedAt: "2026-07-29T12:00:00.000Z",
       publishedAt: "2026-07-29T13:00:00.000Z",
     };
@@ -59,26 +59,32 @@ describe("examination catalog contract", () => {
     ).toBe(false);
   });
 
-  it("keeps every conditional prompt explicitly pending rule mapping", () => {
-    const followUpPrompts = catalog.questions.flatMap(({ options }) =>
-      options.flatMap((option) =>
-        option.responseKind === "affirmation"
-          ? option.followUpPrompts
-          : [],
-      ),
-    );
+  it("maps every conditional option to an executable objective rule", () => {
+    const conditionalOptions = catalog.questions
+      .flatMap(({ options }) => options)
+      .filter(
+        (option) =>
+          option.responseKind === "affirmation" &&
+          option.objectiveMatter.classification ===
+            "grave_when_conditions_met",
+      );
 
-    expect(followUpPrompts.length).toBeGreaterThan(0);
+    expect(conditionalOptions).toHaveLength(37);
     expect(
-      followUpPrompts.every(
-        ({ ruleStatus }) => ruleStatus === "requires_rule_mapping",
+      conditionalOptions.every(
+        (option) =>
+          option.responseKind === "affirmation" &&
+          option.objectiveMatter.classification ===
+            "grave_when_conditions_met" &&
+          option.objectiveMatter.conditions.length > 0,
       ),
     ).toBe(true);
+    expect(catalog.assessment.limitations.ruleStatus).toBe("mapped");
   });
 
   it("records the exact source artifact hash", () => {
     expect(catalog.sourceArtifact.sha256).toBe(
-      "a00f014aaf06186da4b27a184220834f05e21b8d5109fbe154573dc8c3a10b66",
+      "9f9fa17d5768890d7a9fcd5757de2879f1e2e91eb8fdd5f89ddc46399a246296",
     );
   });
 
@@ -124,7 +130,7 @@ describe("examination catalog contract", () => {
     );
   });
 
-  it("rejects conditional grave matter without follow-up prompts", () => {
+  it("rejects conditional grave matter without objective conditions", () => {
     const invalidCatalog = structuredClone(catalog);
     const conditionalOption = invalidCatalog.questions
       .flatMap(({ options }) => options)
@@ -142,7 +148,14 @@ describe("examination catalog contract", () => {
       throw new Error("Expected a conditional affirmative option.");
     }
 
-    conditionalOption.followUpPrompts = [];
+    if (
+      conditionalOption.objectiveMatter.classification !==
+      "grave_when_conditions_met"
+    ) {
+      throw new Error("Expected a conditional matter rule.");
+    }
+
+    conditionalOption.objectiveMatter.conditions = [];
 
     expect(examinationCatalogSchema.safeParse(invalidCatalog).success).toBe(
       false,

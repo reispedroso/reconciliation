@@ -16,7 +16,6 @@ import {
   examinationQuestions,
   limitationOptions,
   limitationQuestions,
-  limitationTriggers,
   optionDoctrinalSources,
   optionFollowUpPrompts,
 } from "../schema/index.js";
@@ -33,7 +32,7 @@ export interface EditorialSeedResult {
 
 export function readEditorialCatalog(): ExaminationCatalog {
   const catalogUrl = new URL(
-    "../../../../content/editorial/pt-BR/examination-catalog.v2.json",
+    "../../../../content/editorial/pt-BR/examination-catalog.v3.json",
     import.meta.url,
   );
   const value: unknown = JSON.parse(readFileSync(catalogUrl, "utf8"));
@@ -151,6 +150,8 @@ export async function seedEditorialCatalog(
         prompt: catalog.assessment.limitations.prompt,
         note: catalog.assessment.limitations.note,
         ruleStatus: catalog.assessment.limitations.ruleStatus,
+        askBefore: catalog.assessment.limitations.askBefore,
+        effect: catalog.assessment.limitations.effect,
       })
       .returning({ id: limitationQuestions.id });
 
@@ -158,14 +159,6 @@ export async function seedEditorialCatalog(
       throw new Error("PostgreSQL did not return the limitation question id.");
     }
 
-    await transaction.insert(limitationTriggers).values(
-      catalog.assessment.limitations.askWhen.map((trigger, position) => ({
-        limitationQuestionId: insertedLimitationQuestion.id,
-        position,
-        field: trigger.field,
-        answer: trigger.answer,
-      })),
-    );
     await transaction.insert(limitationOptions).values(
       catalog.assessment.limitations.options.map((option, position) => ({
         limitationQuestionId: insertedLimitationQuestion.id,
@@ -210,6 +203,11 @@ export async function seedEditorialCatalog(
                   option.startsMortalSinAssessment,
                 objectiveMatterClassification:
                   option.objectiveMatter.classification,
+                objectiveMatterOperator:
+                  option.objectiveMatter.classification ===
+                  "grave_when_conditions_met"
+                    ? option.objectiveMatter.operator
+                    : null,
                 summaryIncludeWhen: option.summary.includeWhen,
                 summaryPdfText: option.summary.pdfText,
                 summaryAskQuantity: option.summary.askQuantity,
@@ -240,16 +238,58 @@ export async function seedEditorialCatalog(
         optionCount += 1;
 
         if (option.responseKind === "affirmation") {
-          if (option.followUpPrompts.length > 0) {
+          const structuredPrompts = [
+            ...(option.objectiveMatter.classification ===
+            "grave_when_conditions_met"
+              ? option.objectiveMatter.conditions.map((prompt) => ({
+                  optionId: insertedOption.id,
+                  code: prompt.code,
+                  position: prompt.position,
+                  prompt: prompt.prompt,
+                  ruleStatus: "mapped" as const,
+                  kind: "objective_condition" as const,
+                  answerKind: prompt.answerKind,
+                  requiredAnswer: prompt.requiredAnswer,
+                }))
+              : []),
+            ...option.conductConfirmationPrompts.map((prompt) => ({
+              optionId: insertedOption.id,
+              code: prompt.code,
+              position: prompt.position,
+              prompt: prompt.prompt,
+              ruleStatus: "mapped" as const,
+              kind: "conduct_confirmation" as const,
+              answerKind: prompt.answerKind,
+              requiredAnswer: prompt.requiredAnswer,
+            })),
+            ...option.consentConsiderations.map((prompt) => ({
+              optionId: insertedOption.id,
+              code: prompt.code,
+              position: prompt.position,
+              prompt: prompt.prompt,
+              ruleStatus: "mapped" as const,
+              kind: "consent_consideration" as const,
+              answerKind: prompt.answerKind,
+              effect: prompt.effect,
+            })),
+            ...option.localDetailPrompts.map((prompt) => ({
+              optionId: insertedOption.id,
+              code: prompt.code,
+              position: prompt.position,
+              prompt: prompt.prompt,
+              ruleStatus: "mapped" as const,
+              kind: "local_detail" as const,
+              inputKind: prompt.inputKind,
+            })),
+          ];
+
+          if (structuredPrompts.length > 0) {
             await transaction.insert(optionFollowUpPrompts).values(
-              option.followUpPrompts.map((followUpPrompt) => ({
-                optionId: insertedOption.id,
-                ...followUpPrompt,
-              })),
+              structuredPrompts,
             );
           }
 
-          followUpPromptCount += option.followUpPrompts.length;
+          followUpPromptCount += structuredPrompts.length;
 
           await transaction.insert(optionDoctrinalSources).values(
             option.doctrinalSourceCodes.map((sourceCode) => {
@@ -280,4 +320,3 @@ export async function seedEditorialCatalog(
     };
   });
 }
-

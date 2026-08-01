@@ -54,6 +54,7 @@ pnpm test
 pnpm build
 
 pnpm catalog:normalize <entrada-v1.json> <saida-v2.json>
+pnpm catalog:map-rules
 
 cp .env.example .env
 pnpm infra:up
@@ -70,7 +71,8 @@ pnpm api:start
 `infra:down` para o container, mas preserva o volume nomeado do PostgreSQL. Não use
 `docker compose down -v` a menos que queira apagar deliberadamente o banco local.
 
-O seed valida `content/editorial/pt-BR/examination-catalog.v2.json` e carrega
+O mapeamento de regras transforma deterministicamente o catálogo v2 em
+`content/editorial/pt-BR/examination-catalog.v3.json`. O seed valida o v3 e carrega
 somente conteúdo editorial. Ele substitui a mesma versão enquanto ela for
 rascunho e recusa sobrescrever uma versão publicada.
 

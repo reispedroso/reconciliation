@@ -10,6 +10,7 @@
     "api:dev": "pnpm --filter @confession/contracts build && pnpm --filter @confession/database build && pnpm --filter @confession/api dev",
     "api:start": "pnpm --filter @confession/api start",
     "catalog:normalize": "node scripts/normalize-editorial-catalog.mjs",
+    "catalog:map-rules": "node scripts/map-editorial-rules.mjs",
     "infra:up": "docker compose up -d --wait postgres",
     "infra:down": "docker compose down",
     "db:generate": "pnpm --filter @confession/database db:generate",

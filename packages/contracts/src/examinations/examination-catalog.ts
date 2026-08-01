@@ -5,11 +5,27 @@ const stableCodeSchema = z
   .min(1)
   .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 
-const positionedPromptSchema = z.strictObject({
+const answerPromptSchema = z.strictObject({
   code: stableCodeSchema,
   position: z.number().int().nonnegative(),
   prompt: z.string().min(1),
-  ruleStatus: z.literal("requires_rule_mapping"),
+  answerKind: z.literal("yes_no_unsure"),
+  requiredAnswer: z.enum(["yes", "no"]),
+});
+
+const consentConsiderationSchema = z.strictObject({
+  code: stableCodeSchema,
+  position: z.number().int().nonnegative(),
+  prompt: z.string().min(1),
+  answerKind: z.literal("yes_no_unsure"),
+  effect: z.literal("inform_deliberate_consent"),
+});
+
+const localDetailPromptSchema = z.strictObject({
+  code: stableCodeSchema,
+  position: z.number().int().nonnegative(),
+  prompt: z.string().min(1),
+  inputKind: z.enum(["short_text", "money"]),
 });
 
 const doctrinalSourceSchema = z.strictObject({
@@ -27,6 +43,17 @@ const summarySchema = z.strictObject({
   askFrequency: z.boolean(),
 });
 
+const objectiveMatterSchema = z.discriminatedUnion("classification", [
+  z.strictObject({
+    classification: z.literal("always_grave"),
+  }),
+  z.strictObject({
+    classification: z.literal("grave_when_conditions_met"),
+    operator: z.enum(["all", "any"]),
+    conditions: z.array(answerPromptSchema).min(1),
+  }),
+]);
+
 const affirmativeOptionSchema = z.strictObject({
   code: stableCodeSchema,
   position: z.number().int().nonnegative(),
@@ -34,10 +61,10 @@ const affirmativeOptionSchema = z.strictObject({
   responseKind: z.literal("affirmation"),
   exclusive: z.literal(false),
   startsMortalSinAssessment: z.literal(true),
-  objectiveMatter: z.strictObject({
-    classification: z.enum(["always_grave", "grave_when_conditions_met"]),
-  }),
-  followUpPrompts: z.array(positionedPromptSchema),
+  objectiveMatter: objectiveMatterSchema,
+  conductConfirmationPrompts: z.array(answerPromptSchema),
+  consentConsiderations: z.array(consentConsiderationSchema),
+  localDetailPrompts: z.array(localDetailPromptSchema),
   summary: summarySchema,
   doctrinalSourceCodes: z.array(stableCodeSchema).min(1),
 });
@@ -84,13 +111,9 @@ const assessmentQuestionSchema = z.strictObject({
 
 const limitationsSchema = z.strictObject({
   code: stableCodeSchema,
-  ruleStatus: z.literal("requires_rule_mapping"),
-  askWhen: z.array(
-    z.strictObject({
-      field: z.literal("deliberate_consent"),
-      answer: z.enum(["no", "unsure"]),
-    }),
-  ),
+  ruleStatus: z.literal("mapped"),
+  askBefore: z.literal("deliberate_consent"),
+  effect: z.literal("inform_deliberate_consent"),
   prompt: z.string().min(1),
   options: z.array(
     z.strictObject({
@@ -190,47 +213,43 @@ function addCatalogIssues(
         return;
       }
 
-      addUniqueCodeIssues(
-        option.followUpPrompts.map(({ code }) => code),
-        [
-          "questions",
-          questionIndex,
-          "options",
-          optionIndex,
-          "followUpPrompts",
-        ],
-        context,
-      );
-      addPositionIssues(
-        option.followUpPrompts.map(({ position }) => position),
-        [
-          "questions",
-          questionIndex,
-          "options",
-          optionIndex,
-          "followUpPrompts",
-        ],
-        context,
-      );
+      const promptGroups: Array<{
+        name: string;
+        prompts: ReadonlyArray<{ code: string; position: number }>;
+      }> = [
+        {
+          name: "conductConfirmationPrompts",
+          prompts: option.conductConfirmationPrompts,
+        },
+        {
+          name: "consentConsiderations",
+          prompts: option.consentConsiderations,
+        },
+        { name: "localDetailPrompts", prompts: option.localDetailPrompts },
+        ...(option.objectiveMatter.classification ===
+        "grave_when_conditions_met"
+          ? [
+              {
+                name: "objectiveMatter.conditions",
+                prompts: option.objectiveMatter.conditions,
+              },
+            ]
+          : []),
+      ];
 
-      if (
-        option.objectiveMatter.classification ===
-          "grave_when_conditions_met" &&
-        option.followUpPrompts.length === 0
-      ) {
-        context.addIssue({
-          code: "custom",
-          message:
-            "Conditional grave matter requires at least one follow-up prompt.",
-          path: [
-            "questions",
-            questionIndex,
-            "options",
-            optionIndex,
-            "followUpPrompts",
-          ],
-        });
+      for (const { name, prompts } of promptGroups) {
+        addPositionIssues(
+          prompts.map(({ position }) => position),
+          ["questions", questionIndex, "options", optionIndex, name],
+          context,
+        );
       }
+
+      addUniqueCodeIssues(
+        promptGroups.flatMap(({ prompts }) => prompts).map(({ code }) => code),
+        ["questions", questionIndex, "options", optionIndex, "prompts"],
+        context,
+      );
 
       option.doctrinalSourceCodes.forEach((sourceCode, sourceIndex) => {
         if (!sourceCodeSet.has(sourceCode)) {
@@ -254,7 +273,7 @@ function addCatalogIssues(
 
 export const examinationCatalogSchema = z
   .strictObject({
-    schemaVersion: z.literal("2.0.0"),
+    schemaVersion: z.literal("3.0.0"),
     catalogVersion: z.string().regex(/^\d+\.\d+\.\d+-draft$/),
     locale: z.literal("pt-BR"),
     title: z.string().min(1),
@@ -287,7 +306,7 @@ export const currentExaminationCatalogQuerySchema = z.strictObject({
 
 export const publishedExaminationCatalogSchema = z
   .strictObject({
-    schemaVersion: z.literal("2.0.0"),
+    schemaVersion: z.literal("3.0.0"),
     catalogVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
     locale: z.literal("pt-BR"),
     title: z.string().min(1),

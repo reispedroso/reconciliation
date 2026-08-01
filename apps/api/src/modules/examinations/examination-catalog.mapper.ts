@@ -49,6 +49,7 @@ export interface PublishedCatalogRecord {
       | "always_grave"
       | "grave_when_conditions_met"
       | null;
+    objectiveMatterOperator: "all" | "any" | null;
     summaryIncludeWhen: string | null;
     summaryPdfText: string | null;
     summaryAskQuantity: boolean | null;
@@ -61,6 +62,16 @@ export interface PublishedCatalogRecord {
     position: number;
     prompt: string;
     ruleStatus: "requires_rule_mapping" | "mapped";
+    kind:
+      | "objective_condition"
+      | "conduct_confirmation"
+      | "consent_consideration"
+      | "local_detail"
+      | null;
+    answerKind: string | null;
+    requiredAnswer: string | null;
+    effect: string | null;
+    inputKind: string | null;
   }>;
   optionSourceLinks: Array<{
     optionId: number;
@@ -84,12 +95,9 @@ export interface PublishedCatalogRecord {
     prompt: string;
     note: string;
     ruleStatus: "requires_rule_mapping" | "mapped";
+    askBefore: string | null;
+    effect: string | null;
   };
-  limitationTriggers: Array<{
-    position: number;
-    field: string;
-    answer: string;
-  }>;
   limitationOptions: Array<{
     code: string;
     position: number;
@@ -192,11 +200,14 @@ export function mapPublishedExaminationCatalog(
       limitations: {
         code: record.limitationQuestion.code,
         ruleStatus: record.limitationQuestion.ruleStatus,
-        askWhen: sorted(
-          record.limitationTriggers,
-          (left, right) => left.position - right.position,
-        )
-          .map(({ field, answer }) => ({ field, answer })),
+        askBefore: required(
+          record.limitationQuestion.askBefore,
+          "assessment.limitations.askBefore",
+        ),
+        effect: required(
+          record.limitationQuestion.effect,
+          "assessment.limitations.effect",
+        ),
         prompt: record.limitationQuestion.prompt,
         options: sorted(
           record.limitationOptions,
@@ -249,6 +260,40 @@ export function mapPublishedExaminationCatalog(
               };
             }
 
+            const optionPrompts = promptsByOptionId.get(option.id) ?? [];
+            const objectiveMatterClassification = required(
+              option.objectiveMatterClassification,
+              `${option.code}.objectiveMatterClassification`,
+            );
+            const objectiveMatter =
+              objectiveMatterClassification === "always_grave"
+                ? { classification: objectiveMatterClassification }
+                : {
+                    classification: objectiveMatterClassification,
+                    operator: required(
+                      option.objectiveMatterOperator,
+                      `${option.code}.objectiveMatterOperator`,
+                    ),
+                    conditions: sorted(
+                      optionPrompts.filter(
+                        ({ kind }) => kind === "objective_condition",
+                      ),
+                      (left, right) => left.position - right.position,
+                    ).map((prompt) => ({
+                      code: prompt.code,
+                      position: prompt.position,
+                      prompt: prompt.prompt,
+                      answerKind: required(
+                        prompt.answerKind,
+                        `${prompt.code}.answerKind`,
+                      ),
+                      requiredAnswer: required(
+                        prompt.requiredAnswer,
+                        `${prompt.code}.requiredAnswer`,
+                      ),
+                    })),
+                  };
+
             return {
               code: option.code,
               position: option.position,
@@ -259,20 +304,55 @@ export function mapPublishedExaminationCatalog(
                 option.startsMortalSinAssessment,
                 `${option.code}.startsMortalSinAssessment`,
               ),
-              objectiveMatter: {
-                classification: required(
-                  option.objectiveMatterClassification,
-                  `${option.code}.objectiveMatterClassification`,
+              objectiveMatter,
+              conductConfirmationPrompts: sorted(
+                optionPrompts.filter(
+                  ({ kind }) => kind === "conduct_confirmation",
                 ),
-              },
-              followUpPrompts: sorted(
-                promptsByOptionId.get(option.id) ?? [],
                 (left, right) => left.position - right.position,
-              )
-                .map(
-                  ({ optionId: _optionId, ...followUpPrompt }) =>
-                    followUpPrompt,
+              ).map((prompt) => ({
+                code: prompt.code,
+                position: prompt.position,
+                prompt: prompt.prompt,
+                answerKind: required(
+                  prompt.answerKind,
+                  `${prompt.code}.answerKind`,
                 ),
+                requiredAnswer: required(
+                  prompt.requiredAnswer,
+                  `${prompt.code}.requiredAnswer`,
+                ),
+              })),
+              consentConsiderations: sorted(
+                optionPrompts.filter(
+                  ({ kind }) => kind === "consent_consideration",
+                ),
+                (left, right) => left.position - right.position,
+              ).map((prompt) => ({
+                code: prompt.code,
+                position: prompt.position,
+                prompt: prompt.prompt,
+                answerKind: required(
+                  prompt.answerKind,
+                  `${prompt.code}.answerKind`,
+                ),
+                effect: required(
+                  prompt.effect,
+                  `${prompt.code}.effect`,
+                ),
+              })),
+              localDetailPrompts: sorted(
+                optionPrompts.filter(({ kind }) => kind === "local_detail"),
+                (left, right) => left.position - right.position,
+              ).map((prompt) => ({
+                code: prompt.code,
+                position: prompt.position,
+                prompt: prompt.prompt,
+                inputKind: required(
+                  prompt.inputKind,
+                  `${prompt.code}.inputKind`,
+                ),
+              })),
               summary: {
                 includeWhen: required(
                   option.summaryIncludeWhen,

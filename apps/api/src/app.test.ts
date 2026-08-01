@@ -11,7 +11,7 @@ import { buildApp } from "./app.js";
 import { GetCurrentExaminationCatalogService } from "./modules/examinations/examination-catalog.service.js";
 
 const catalogUrl = new URL(
-  "../../../content/editorial/pt-BR/examination-catalog.v2.json",
+  "../../../content/editorial/pt-BR/examination-catalog.v3.json",
   import.meta.url,
 );
 const draftCatalog = examinationCatalogSchema.parse(
@@ -24,7 +24,7 @@ const {
 } = draftCatalog;
 const publishedCatalog = publishedExaminationCatalogSchema.parse({
   ...catalogContent,
-  catalogVersion: "0.2.0",
+  catalogVersion: "0.3.0",
   reviewedAt: "2026-07-29T12:00:00.000Z",
   publishedAt: "2026-07-29T13:00:00.000Z",
 });
@@ -134,4 +134,3 @@ describe("API", () => {
     expect(response.body).not.toContain("database secret");
   });
 });
-

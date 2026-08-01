@@ -8,7 +8,6 @@ import {
   examinationQuestions,
   limitationOptions,
   limitationQuestions,
-  limitationTriggers,
   optionDoctrinalSources,
   optionFollowUpPrompts,
   type Database,
@@ -112,6 +111,7 @@ export class DrizzlePublishedExaminationCatalogRepository
             examinationOptions.disableAffirmativeOptionsWhileSelected,
           objectiveMatterClassification:
             examinationOptions.objectiveMatterClassification,
+          objectiveMatterOperator: examinationOptions.objectiveMatterOperator,
           summaryIncludeWhen: examinationOptions.summaryIncludeWhen,
           summaryPdfText: examinationOptions.summaryPdfText,
           summaryAskQuantity: examinationOptions.summaryAskQuantity,
@@ -135,6 +135,11 @@ export class DrizzlePublishedExaminationCatalogRepository
           position: optionFollowUpPrompts.position,
           prompt: optionFollowUpPrompts.prompt,
           ruleStatus: optionFollowUpPrompts.ruleStatus,
+          kind: optionFollowUpPrompts.kind,
+          answerKind: optionFollowUpPrompts.answerKind,
+          requiredAnswer: optionFollowUpPrompts.requiredAnswer,
+          effect: optionFollowUpPrompts.effect,
+          inputKind: optionFollowUpPrompts.inputKind,
         })
         .from(optionFollowUpPrompts)
         .innerJoin(
@@ -196,6 +201,8 @@ export class DrizzlePublishedExaminationCatalogRepository
           prompt: limitationQuestions.prompt,
           note: limitationQuestions.note,
           ruleStatus: limitationQuestions.ruleStatus,
+          askBefore: limitationQuestions.askBefore,
+          effect: limitationQuestions.effect,
         })
         .from(limitationQuestions)
         .where(eq(limitationQuestions.catalogVersionId, catalogVersionId))
@@ -205,20 +212,6 @@ export class DrizzlePublishedExaminationCatalogRepository
         throw new Error("Published catalog has no limitation question.");
       }
 
-      const triggers = await transaction
-        .select({
-          position: limitationTriggers.position,
-          field: limitationTriggers.field,
-          answer: limitationTriggers.answer,
-        })
-        .from(limitationTriggers)
-        .where(
-          eq(
-            limitationTriggers.limitationQuestionId,
-            limitationQuestion.id,
-          ),
-        )
-        .orderBy(asc(limitationTriggers.position));
       const limitationOptionRows = await transaction
         .select({
           code: limitationOptions.code,
@@ -241,7 +234,6 @@ export class DrizzlePublishedExaminationCatalogRepository
         assessmentQuestions: globalAssessmentQuestions,
         assessmentAnswers: globalAssessmentAnswers,
         limitationQuestion,
-        limitationTriggers: triggers,
         limitationOptions: limitationOptionRows,
       } satisfies PublishedCatalogRecord;
     });

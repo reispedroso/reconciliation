@@ -29,6 +29,18 @@ export const objectiveMatterClassification = pgEnum(
   ["always_grave", "grave_when_conditions_met"],
 );
 
+export const objectiveMatterOperator = pgEnum("objective_matter_operator", [
+  "all",
+  "any",
+]);
+
+export const followUpPromptKind = pgEnum("follow_up_prompt_kind", [
+  "objective_condition",
+  "conduct_confirmation",
+  "consent_consideration",
+  "local_detail",
+]);
+
 export const ruleStatus = pgEnum("rule_status", [
   "requires_rule_mapping",
   "mapped",
@@ -149,6 +161,9 @@ export const examinationOptions = pgTable(
     objectiveMatterClassification: objectiveMatterClassification(
       "objective_matter_classification",
     ),
+    objectiveMatterOperator: objectiveMatterOperator(
+      "objective_matter_operator",
+    ),
     summaryIncludeWhen: text("summary_include_when"),
     summaryPdfText: text("summary_pdf_text"),
     summaryAskQuantity: boolean("summary_ask_quantity"),
@@ -207,17 +222,55 @@ export const optionFollowUpPrompts = pgTable(
     position: integer("position").notNull(),
     prompt: text("prompt").notNull(),
     ruleStatus: ruleStatus("rule_status").notNull(),
+    kind: followUpPromptKind("kind"),
+    answerKind: text("answer_kind"),
+    requiredAnswer: text("required_answer"),
+    effect: text("effect"),
+    inputKind: text("input_kind"),
   },
   (table) => [
     unique("option_follow_up_prompts_option_code_unique").on(
       table.optionId,
       table.code,
     ),
-    unique("option_follow_up_prompts_option_position_unique").on(
+    unique("option_follow_up_prompts_option_kind_position_unique").on(
       table.optionId,
+      table.kind,
       table.position,
     ),
     check("option_follow_up_prompts_position_check", sql`${table.position} >= 0`),
+    check(
+      "option_follow_up_prompts_shape_check",
+      sql`(
+        ${table.kind} IS NULL
+        AND ${table.ruleStatus} = 'requires_rule_mapping'
+        AND ${table.answerKind} IS NULL
+        AND ${table.requiredAnswer} IS NULL
+        AND ${table.effect} IS NULL
+        AND ${table.inputKind} IS NULL
+      ) OR (
+        ${table.kind} IN ('objective_condition', 'conduct_confirmation')
+        AND ${table.ruleStatus} = 'mapped'
+        AND ${table.answerKind} = 'yes_no_unsure'
+        AND ${table.requiredAnswer} IN ('yes', 'no')
+        AND ${table.effect} IS NULL
+        AND ${table.inputKind} IS NULL
+      ) OR (
+        ${table.kind} = 'consent_consideration'
+        AND ${table.ruleStatus} = 'mapped'
+        AND ${table.answerKind} = 'yes_no_unsure'
+        AND ${table.requiredAnswer} IS NULL
+        AND ${table.effect} = 'inform_deliberate_consent'
+        AND ${table.inputKind} IS NULL
+      ) OR (
+        ${table.kind} = 'local_detail'
+        AND ${table.ruleStatus} = 'mapped'
+        AND ${table.answerKind} IS NULL
+        AND ${table.requiredAnswer} IS NULL
+        AND ${table.effect} IS NULL
+        AND ${table.inputKind} IN ('short_text', 'money')
+      )`,
+    ),
   ],
 );
 
@@ -295,6 +348,8 @@ export const limitationQuestions = pgTable("limitation_questions", {
   prompt: text("prompt").notNull(),
   note: text("note").notNull(),
   ruleStatus: ruleStatus("rule_status").notNull(),
+  askBefore: text("ask_before"),
+  effect: text("effect"),
 });
 
 export const limitationTriggers = pgTable(
@@ -348,4 +403,3 @@ export const limitationOptions = pgTable(
     check("limitation_options_position_check", sql`${table.position} >= 0`),
   ],
 );
-
