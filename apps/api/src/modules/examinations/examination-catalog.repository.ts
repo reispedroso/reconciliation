@@ -147,7 +147,7 @@ export class DrizzlePublishedExaminationCatalogRepository
             examinationOptions.objectiveMatterClassification,
           objectiveMatterOperator: examinationOptions.objectiveMatterOperator,
           summaryIncludeWhen: examinationOptions.summaryIncludeWhen,
-          summaryPdfText: examinationOptions.summaryPdfText,
+          summaryText: examinationOptions.summaryText,
           summaryAskQuantity: examinationOptions.summaryAskQuantity,
           summaryAskFrequency: examinationOptions.summaryAskFrequency,
           summaryBehavior: examinationOptions.summaryBehavior,

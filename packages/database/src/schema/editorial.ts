@@ -165,7 +165,7 @@ export const examinationOptions = pgTable(
       "objective_matter_operator",
     ),
     summaryIncludeWhen: text("summary_include_when"),
-    summaryPdfText: text("summary_pdf_text"),
+    summaryText: text("summary_text"),
     summaryAskQuantity: boolean("summary_ask_quantity"),
     summaryAskFrequency: boolean("summary_ask_frequency"),
     summaryBehavior: text("summary_behavior"),
@@ -187,8 +187,8 @@ export const examinationOptions = pgTable(
         AND ${table.exclusive} = false
         AND ${table.startsMortalSinAssessment} = true
         AND ${table.objectiveMatterClassification} IS NOT NULL
-        AND ${table.summaryIncludeWhen} = 'mortal_sin'
-        AND ${table.summaryPdfText} IS NOT NULL
+        AND ${table.summaryIncludeWhen} = 'selected'
+        AND ${table.summaryText} IS NOT NULL
         AND ${table.summaryAskQuantity} IS NOT NULL
         AND ${table.summaryAskFrequency} IS NOT NULL
         AND ${table.clearAffirmativeSelections} IS NULL
@@ -203,7 +203,7 @@ export const examinationOptions = pgTable(
         AND ${table.startsMortalSinAssessment} IS NULL
         AND ${table.objectiveMatterClassification} IS NULL
         AND ${table.summaryIncludeWhen} IS NULL
-        AND ${table.summaryPdfText} IS NULL
+        AND ${table.summaryText} IS NULL
         AND ${table.summaryAskQuantity} IS NULL
         AND ${table.summaryAskFrequency} IS NULL
       )`,

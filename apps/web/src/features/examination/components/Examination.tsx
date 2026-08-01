@@ -3,6 +3,7 @@ import type {
   ExaminationCatalogQuestion,
 } from "@addiopeccati/contracts";
 import {
+  buildConfessionList,
   isOptionDisabled,
   selectOption,
   type ExaminationQuestionDefinition,
@@ -25,7 +26,7 @@ function toSelectionDefinition(
       responseKind: option.responseKind,
       exclusive: option.exclusive,
       ...(option.responseKind === "affirmation"
-        ? { summary: { pdfText: option.summary.pdfText } }
+        ? { summary: { text: option.summary.text } }
         : {}),
     })),
   };
@@ -48,17 +49,22 @@ function splitQuestionTitle(title: string, questionIndex: number) {
   };
 }
 
-export interface ExaminationPreviewProps {
+export interface ExaminationProps {
   catalog: DraftExaminationCatalogPreview;
 }
 
-export function ExaminationPreview({ catalog }: ExaminationPreviewProps) {
+export function Examination({ catalog }: ExaminationProps) {
   const { clearSession, setState, state } = useExaminationSession(catalog);
   const [openCriteriaHelpCode, setOpenCriteriaHelpCode] = useState<
     string | null
   >(null);
   const [clearConfirmationVisible, setClearConfirmationVisible] =
     useState(false);
+  const [
+    completionClearConfirmationVisible,
+    setCompletionClearConfirmationVisible,
+  ] = useState(false);
+  const [clearSuccessVisible, setClearSuccessVisible] = useState(false);
   const [completionVisible, setCompletionVisible] = useState(false);
   const focusContentAfterNavigation = useRef(false);
   const selectionDefinitions = useMemo(
@@ -91,12 +97,45 @@ export function ExaminationPreview({ catalog }: ExaminationPreviewProps) {
   const answeredCount = catalog.questions.filter(
     ({ code }) => (state.selections[code]?.length ?? 0) > 0,
   ).length;
-  const firstUnansweredIndex = catalog.questions.findIndex(
-    ({ code }) => (state.selections[code]?.length ?? 0) === 0,
-  );
   const titleParts = splitQuestionTitle(
     activeQuestion.title,
     activeQuestionIndex,
+  );
+  const confessionSections = catalog.questions.flatMap(
+    (question, questionIndex) => {
+      const selectedOptionCodes = new Set(
+        state.selections[question.code] ?? [],
+      );
+      const entries = buildConfessionList(
+        question.options.flatMap((option) =>
+          option.responseKind === "affirmation"
+            ? [
+                {
+                  optionCode: option.code,
+                  selected: selectedOptionCodes.has(option.code),
+                  text: option.summary.text,
+                },
+              ]
+            : [],
+        ),
+      );
+
+      if (entries.length === 0) {
+        return [];
+      }
+
+      return [
+        {
+          code: question.code,
+          entries,
+          title: splitQuestionTitle(question.title, questionIndex).title,
+        },
+      ];
+    },
+  );
+  const confessionItemCount = confessionSections.reduce(
+    (total, section) => total + section.entries.length,
+    0,
   );
 
   if (definition === undefined) {
@@ -137,6 +176,8 @@ export function ExaminationPreview({ catalog }: ExaminationPreviewProps) {
     setCompletionVisible(false);
     setOpenCriteriaHelpCode(null);
     setClearConfirmationVisible(false);
+    setCompletionClearConfirmationVisible(false);
+    setClearSuccessVisible(false);
     setState((current) => ({
       ...current,
       activeQuestionCode: question.code,
@@ -144,6 +185,7 @@ export function ExaminationPreview({ catalog }: ExaminationPreviewProps) {
   }
 
   function handleSelection(optionCode: string) {
+    setClearSuccessVisible(false);
     setState((current) => {
       const currentCodes = current.selections[activeQuestionCode] ?? [];
       const nextCodes = selectOption(
@@ -171,11 +213,16 @@ export function ExaminationPreview({ catalog }: ExaminationPreviewProps) {
     setCompletionVisible(false);
     setOpenCriteriaHelpCode(null);
     setClearConfirmationVisible(false);
+    setCompletionClearConfirmationVisible(false);
+    setClearSuccessVisible(true);
   }
 
   function showCompletion() {
     focusContentAfterNavigation.current = true;
     setOpenCriteriaHelpCode(null);
+    setClearConfirmationVisible(false);
+    setCompletionClearConfirmationVisible(false);
+    setClearSuccessVisible(false);
     setCompletionVisible(true);
   }
 
@@ -196,6 +243,7 @@ export function ExaminationPreview({ catalog }: ExaminationPreviewProps) {
           <button
             className="clear-examination-trigger"
             onClick={() => {
+              setClearSuccessVisible(false);
               setClearConfirmationVisible((current) => !current);
             }}
             type="button"
@@ -293,36 +341,104 @@ export function ExaminationPreview({ catalog }: ExaminationPreviewProps) {
       <div className="examination-content">
         {completionVisible ? (
           <section className="completion-card">
-            <p className="question-kicker">Fim da prévia atual</p>
+            <p className="question-kicker">Sua lista para a confissão</p>
             <h2 id="examination-completion-heading" tabIndex={-1}>
-              Você chegou ao final das seções
+              Pecados que você marcou para confessar
             </h2>
-            <p>
-              {answeredCount === catalog.questions.length
-                ? "Os nove grupos possuem uma resposta."
-                : `${answeredCount} de ${catalog.questions.length} grupos possuem uma resposta.`}
-            </p>
-            <p>
-              Nesta versão, as marcações ainda não constituem uma lista de
-              pecados confirmados. A avaliação das três condições e o resumo
-              privado serão acrescentados no próximo marco.
-            </p>
-            <button
-              className="primary-button"
-              onClick={() => {
-                navigateToQuestion(
-                  firstUnansweredIndex === -1 ? 0 : firstUnansweredIndex,
-                );
-              }}
-              type="button"
-            >
-              {firstUnansweredIndex === -1
-                ? "Rever desde o início"
-                : "Revisar grupos pendentes"}
-            </button>
+            {confessionItemCount === 0 ? (
+              <div className="confession-list-empty">
+                <h3>Nenhum item foi marcado</h3>
+                <p>
+                  Volte ao exame se precisar rever alguma seção. Não marque
+                  algo apenas para preencher a lista.
+                </p>
+              </div>
+            ) : (
+              <>
+                <p className="confession-list-introduction">
+                  Leia esta lista com calma antes da confissão. Ela reúne
+                  somente o que você marcou e permanece privada nesta aba.
+                </p>
+                <div className="confession-list">
+                  {confessionSections.map((section) => (
+                    <section key={section.code}>
+                      <h3>{section.title}</h3>
+                      <ul>
+                        {section.entries.map((entry) => (
+                          <li key={entry.optionCode}>{entry.text}</li>
+                        ))}
+                      </ul>
+                    </section>
+                  ))}
+                </div>
+              </>
+            )}
+            <div className="scrupulosity-note" role="note">
+              <strong>Faça este exame com sinceridade e serenidade.</strong>
+              <p>
+                Uma dúvida, tentação ou pensamento involuntário não deve ser
+                marcado como se fosse uma escolha deliberada. Se você sofre
+                com escrúpulos, siga a orientação do seu confessor e não tente
+                alcançar uma certeza impossível.
+              </p>
+            </div>
+            <div className="completion-actions">
+              <button
+                className="secondary-button"
+                onClick={() => {
+                  navigateToQuestion(0);
+                }}
+                type="button"
+              >
+                Rever o exame
+              </button>
+              <button
+                className="danger-button"
+                onClick={() => {
+                  setCompletionClearConfirmationVisible(true);
+                }}
+                type="button"
+              >
+                Encerrar e apagar
+              </button>
+            </div>
+            {completionClearConfirmationVisible ? (
+              <div className="completion-clear-confirmation" role="alert">
+                <strong>Apagar todas as marcações deste exame?</strong>
+                <p>
+                  A lista, as opções marcadas, o progresso e o cache local
+                  deste exame serão removidos do navegador e não poderão ser
+                  recuperados.
+                </p>
+                <div>
+                  <button
+                    className="secondary-button secondary-button--compact"
+                    onClick={() => {
+                      setCompletionClearConfirmationVisible(false);
+                    }}
+                    type="button"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    className="danger-button"
+                    onClick={handleClearSession}
+                    type="button"
+                  >
+                    Sim, apagar tudo
+                  </button>
+                </div>
+              </div>
+            ) : null}
           </section>
         ) : (
           <>
+            {clearSuccessVisible ? (
+              <p className="clear-success" role="status">
+                Tudo foi apagado. Não restam marcações, progresso nem cache
+                local deste exame no navegador.
+              </p>
+            ) : null}
             <fieldset
               aria-labelledby={`${activeQuestion.code}-heading`}
               className="question-card"
@@ -409,7 +525,9 @@ export function ExaminationPreview({ catalog }: ExaminationPreviewProps) {
                 ← Voltar
               </button>
               <span>
-                {selectedCodes.length > 0 ? "Grupo revisado" : "Pode ser revisado depois"}
+                {selectedCodes.length > 0
+                  ? "Grupo revisado"
+                  : "Marque apenas o que realmente aconteceu"}
               </span>
               <button
                 className="primary-button"
@@ -423,7 +541,7 @@ export function ExaminationPreview({ catalog }: ExaminationPreviewProps) {
                 type="button"
               >
                 {activeQuestionIndex === catalog.questions.length - 1
-                  ? "Concluir revisão"
+                  ? "Ver lista para a confissão"
                   : "Continuar →"}
               </button>
             </nav>

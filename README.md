@@ -1,4 +1,3 @@
-=======
 # Addio peccati
 
 Aplicação web católica para auxiliar o exame de consciência e a preparação
@@ -23,6 +22,7 @@ culpabilidade pessoal do usuário.
 - seleções múltiplas e opções negativas exclusivas;
 - explicação das três condições do pecado mortal com referência ao Catecismo;
 - seleções e etapa atual restauradas durante a mesma aba com `sessionStorage`;
+- lista privada dos itens marcados, agrupada por seção ao final do exame;
 - ação explícita para apagar o exame local;
 - interface adaptada para celular e desktop;
 - validação de contratos e regras com testes automatizados.
@@ -32,8 +32,6 @@ culpabilidade pessoal do usuário.
 - interface completa para avaliar matéria grave, plena consciência e
   consentimento deliberado;
 - perguntas complementares previstas nas regras do domínio;
-- resumo privado das respostas avaliadas;
-- impressão e geração local de PDF;
 - revisão clerical e publicação de uma versão editorial;
 - refinamento contínuo de acessibilidade e experiência mobile.
 
@@ -191,7 +189,7 @@ sobrescrever uma versão publicada.
 ```text
 GET /health
 GET /v1/examination-catalogs/current?locale=pt-BR
-GET /v1/examination-catalogs/preview?locale=pt-BR&catalogVersion=0.3.0-draft
+GET /v1/examination-catalogs/preview?locale=pt-BR&catalogVersion=0.4.0-draft
 ```
 
 `/current` retorna somente conteúdo publicado. Como o catálogo atual ainda é

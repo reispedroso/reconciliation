@@ -134,8 +134,8 @@ function normalizeOption(option, position) {
       }),
     ),
     summary: {
-      includeWhen: "mortal_sin",
-      pdfText: option.summary.pdfText,
+      includeWhen: "selected",
+      text: option.summary.text,
       askQuantity: option.summary.askQuantity,
       askFrequency: option.summary.askFrequency,
     },

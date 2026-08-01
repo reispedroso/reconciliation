@@ -649,7 +649,7 @@ function splitProstitution(option) {
       consentConsiderations: [],
       summary: {
         ...option.summary,
-        pdfText: "Paguei por ato sexual.",
+        text: "Paguei por ato sexual.",
       },
     },
     {
@@ -659,7 +659,7 @@ function splitProstitution(option) {
       consentConsiderations: [],
       summary: {
         ...option.summary,
-        pdfText: "Explorei a prostituição de outra pessoa.",
+        text: "Explorei a prostituição de outra pessoa.",
       },
     },
     {
@@ -677,7 +677,7 @@ function splitProstitution(option) {
       ],
       summary: {
         ...option.summary,
-        pdfText: "Entreguei-me à prostituição.",
+        text: "Entreguei-me à prostituição.",
       },
     },
   ];
@@ -685,8 +685,8 @@ function splitProstitution(option) {
 
 const output = {
   ...input,
-  schemaVersion: "3.0.0",
-  catalogVersion: "0.3.0-draft",
+  schemaVersion: "4.0.0",
+  catalogVersion: "0.4.0-draft",
   sourceArtifact: {
     fileName: "examination-catalog.v2.json",
     sha256: createHash("sha256").update(inputBuffer).digest("hex"),

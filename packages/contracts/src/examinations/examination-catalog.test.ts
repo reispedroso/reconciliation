@@ -121,7 +121,7 @@ describe("examination catalog contract", () => {
 
   it("records the exact source artifact hash", () => {
     expect(catalog.sourceArtifact.sha256).toBe(
-      "9f9fa17d5768890d7a9fcd5757de2879f1e2e91eb8fdd5f89ddc46399a246296",
+      "d34c842310ffb43384ffc4544b218b2713b4438f91517bd86fb639354b280215",
     );
   });
 

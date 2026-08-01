@@ -209,7 +209,7 @@ export async function seedEditorialCatalog(
                     ? option.objectiveMatter.operator
                     : null,
                 summaryIncludeWhen: option.summary.includeWhen,
-                summaryPdfText: option.summary.pdfText,
+                summaryText: option.summary.text,
                 summaryAskQuantity: option.summary.askQuantity,
                 summaryAskFrequency: option.summary.askFrequency,
               }

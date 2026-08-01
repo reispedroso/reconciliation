@@ -1,8 +1,8 @@
 export {
-  buildConfessionSummary,
-  type ConfessionSummaryEntry,
-  type SummaryCandidate,
-} from "./examination/build-summary.js";
+  buildConfessionList,
+  type ConfessionListCandidate,
+  type ConfessionListEntry,
+} from "./examination/build-confession-list.js";
 export {
   evaluateItem,
   type AssessmentClassification,

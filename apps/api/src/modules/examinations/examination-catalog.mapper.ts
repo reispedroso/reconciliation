@@ -53,7 +53,7 @@ export interface PublishedCatalogRecord {
       | null;
     objectiveMatterOperator: "all" | "any" | null;
     summaryIncludeWhen: string | null;
-    summaryPdfText: string | null;
+    summaryText: string | null;
     summaryAskQuantity: boolean | null;
     summaryAskFrequency: boolean | null;
     summaryBehavior: string | null;
@@ -356,9 +356,9 @@ function mapExaminationCatalogContent(record: PublishedCatalogRecord) {
                   option.summaryIncludeWhen,
                   `${option.code}.summaryIncludeWhen`,
                 ),
-                pdfText: required(
-                  option.summaryPdfText,
-                  `${option.code}.summaryPdfText`,
+                text: required(
+                  option.summaryText,
+                  `${option.code}.summaryText`,
                 ),
                 askQuantity: required(
                   option.summaryAskQuantity,

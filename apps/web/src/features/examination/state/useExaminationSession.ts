@@ -9,6 +9,7 @@ import {
 } from "react";
 
 const examinationSessionKey = "addiopeccati:examination-session:v1";
+const applicationSessionKeyPrefix = "addiopeccati:";
 
 export interface ExaminationSessionState {
   activeQuestionCode: string;
@@ -164,7 +165,13 @@ export function useExaminationSession(
     skipNextPersistence.current = true;
 
     try {
-      window.sessionStorage.removeItem(examinationSessionKey);
+      for (let index = window.sessionStorage.length - 1; index >= 0; index -= 1) {
+        const key = window.sessionStorage.key(index);
+
+        if (key?.startsWith(applicationSessionKeyPrefix) === true) {
+          window.sessionStorage.removeItem(key);
+        }
+      }
     } catch {
       // No personal data is logged when browser storage is unavailable.
     }

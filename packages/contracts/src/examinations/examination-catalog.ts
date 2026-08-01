@@ -37,8 +37,8 @@ const doctrinalSourceSchema = z.strictObject({
 });
 
 const summarySchema = z.strictObject({
-  includeWhen: z.literal("mortal_sin"),
-  pdfText: z.string().min(1),
+  includeWhen: z.literal("selected"),
+  text: z.string().min(1),
   askQuantity: z.boolean(),
   askFrequency: z.boolean(),
 });
@@ -273,7 +273,7 @@ function addCatalogIssues(
 
 export const examinationCatalogSchema = z
   .strictObject({
-    schemaVersion: z.literal("3.0.0"),
+    schemaVersion: z.literal("4.0.0"),
     catalogVersion: z.string().regex(/^\d+\.\d+\.\d+-draft$/),
     locale: z.literal("pt-BR"),
     title: z.string().min(1),
@@ -311,7 +311,7 @@ export const draftExaminationCatalogPreviewQuerySchema = z.strictObject({
 
 export const draftExaminationCatalogPreviewSchema = z
   .strictObject({
-    schemaVersion: z.literal("3.0.0"),
+    schemaVersion: z.literal("4.0.0"),
     catalogVersion: z.string().regex(/^\d+\.\d+\.\d+-draft$/),
     locale: z.literal("pt-BR"),
     title: z.string().min(1),
@@ -334,7 +334,7 @@ export const draftExaminationCatalogPreviewSchema = z
 
 export const publishedExaminationCatalogSchema = z
   .strictObject({
-    schemaVersion: z.literal("3.0.0"),
+    schemaVersion: z.literal("4.0.0"),
     catalogVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
     locale: z.literal("pt-BR"),
     title: z.string().min(1),

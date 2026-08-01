@@ -6,7 +6,7 @@ import {
 
 const apiUrl =
   import.meta.env["VITE_API_URL"] ?? "http://127.0.0.1:3000";
-const catalogCacheKey = "addiopeccati:editorial-catalog:0.3.0-draft";
+const catalogCacheKey = "addiopeccati:editorial-catalog:0.4.0-draft";
 
 function readCachedCatalog(): DraftExaminationCatalogPreview | null {
   try {
@@ -38,7 +38,7 @@ export async function fetchDraftCatalog(
 ): Promise<DraftExaminationCatalogPreview> {
   const query = new URLSearchParams({
     locale: "pt-BR",
-    catalogVersion: "0.3.0-draft",
+    catalogVersion: "0.4.0-draft",
   });
   let response: Response;
 

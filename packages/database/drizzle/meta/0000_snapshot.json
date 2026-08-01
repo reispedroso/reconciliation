@@ -1,5 +1,5 @@
 {
-  "id": "91ecc3ca-7d43-413e-8db3-047309199b21",
+  "id": "811d916d-c55b-45ea-987d-9aabd065173e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -451,14 +451,21 @@
           "primaryKey": false,
           "notNull": false
         },
+        "objective_matter_operator": {
+          "name": "objective_matter_operator",
+          "type": "objective_matter_operator",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
         "summary_include_when": {
           "name": "summary_include_when",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "summary_pdf_text": {
-          "name": "summary_pdf_text",
+        "summary_text": {
+          "name": "summary_text",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -525,7 +532,7 @@
         },
         "examination_options_shape_check": {
           "name": "examination_options_shape_check",
-          "value": "(\n        \"examination_options\".\"response_kind\" = 'affirmation'\n        AND \"examination_options\".\"exclusive\" = false\n        AND \"examination_options\".\"starts_mortal_sin_assessment\" = true\n        AND \"examination_options\".\"objective_matter_classification\" IS NOT NULL\n        AND \"examination_options\".\"summary_include_when\" = 'mortal_sin'\n        AND \"examination_options\".\"summary_pdf_text\" IS NOT NULL\n        AND \"examination_options\".\"summary_ask_quantity\" IS NOT NULL\n        AND \"examination_options\".\"summary_ask_frequency\" IS NOT NULL\n        AND \"examination_options\".\"clear_affirmative_selections\" IS NULL\n        AND \"examination_options\".\"disable_affirmative_options_while_selected\" IS NULL\n        AND \"examination_options\".\"summary_behavior\" IS NULL\n      ) OR (\n        \"examination_options\".\"response_kind\" = 'denial'\n        AND \"examination_options\".\"exclusive\" = true\n        AND \"examination_options\".\"clear_affirmative_selections\" = true\n        AND \"examination_options\".\"disable_affirmative_options_while_selected\" = true\n        AND \"examination_options\".\"summary_behavior\" = 'omit'\n        AND \"examination_options\".\"starts_mortal_sin_assessment\" IS NULL\n        AND \"examination_options\".\"objective_matter_classification\" IS NULL\n        AND \"examination_options\".\"summary_include_when\" IS NULL\n        AND \"examination_options\".\"summary_pdf_text\" IS NULL\n        AND \"examination_options\".\"summary_ask_quantity\" IS NULL\n        AND \"examination_options\".\"summary_ask_frequency\" IS NULL\n      )"
+          "value": "(\n        \"examination_options\".\"response_kind\" = 'affirmation'\n        AND \"examination_options\".\"exclusive\" = false\n        AND \"examination_options\".\"starts_mortal_sin_assessment\" = true\n        AND \"examination_options\".\"objective_matter_classification\" IS NOT NULL\n        AND \"examination_options\".\"summary_include_when\" = 'selected'\n        AND \"examination_options\".\"summary_text\" IS NOT NULL\n        AND \"examination_options\".\"summary_ask_quantity\" IS NOT NULL\n        AND \"examination_options\".\"summary_ask_frequency\" IS NOT NULL\n        AND \"examination_options\".\"clear_affirmative_selections\" IS NULL\n        AND \"examination_options\".\"disable_affirmative_options_while_selected\" IS NULL\n        AND \"examination_options\".\"summary_behavior\" IS NULL\n      ) OR (\n        \"examination_options\".\"response_kind\" = 'denial'\n        AND \"examination_options\".\"exclusive\" = true\n        AND \"examination_options\".\"clear_affirmative_selections\" = true\n        AND \"examination_options\".\"disable_affirmative_options_while_selected\" = true\n        AND \"examination_options\".\"summary_behavior\" = 'omit'\n        AND \"examination_options\".\"starts_mortal_sin_assessment\" IS NULL\n        AND \"examination_options\".\"objective_matter_classification\" IS NULL\n        AND \"examination_options\".\"summary_include_when\" IS NULL\n        AND \"examination_options\".\"summary_text\" IS NULL\n        AND \"examination_options\".\"summary_ask_quantity\" IS NULL\n        AND \"examination_options\".\"summary_ask_frequency\" IS NULL\n      )"
         }
       },
       "isRLSEnabled": false
@@ -760,6 +767,18 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
+        },
+        "ask_before": {
+          "name": "ask_before",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "effect": {
+          "name": "effect",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -987,6 +1006,37 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "follow_up_prompt_kind",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "answer_kind": {
+          "name": "answer_kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "required_answer": {
+          "name": "required_answer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "effect": {
+          "name": "effect",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "input_kind": {
+          "name": "input_kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -1015,11 +1065,12 @@
             "code"
           ]
         },
-        "option_follow_up_prompts_option_position_unique": {
-          "name": "option_follow_up_prompts_option_position_unique",
+        "option_follow_up_prompts_option_kind_position_unique": {
+          "name": "option_follow_up_prompts_option_kind_position_unique",
           "nullsNotDistinct": false,
           "columns": [
             "option_id",
+            "kind",
             "position"
           ]
         }
@@ -1029,6 +1080,10 @@
         "option_follow_up_prompts_position_check": {
           "name": "option_follow_up_prompts_position_check",
           "value": "\"option_follow_up_prompts\".\"position\" >= 0"
+        },
+        "option_follow_up_prompts_shape_check": {
+          "name": "option_follow_up_prompts_shape_check",
+          "value": "(\n        \"option_follow_up_prompts\".\"kind\" IS NULL\n        AND \"option_follow_up_prompts\".\"rule_status\" = 'requires_rule_mapping'\n        AND \"option_follow_up_prompts\".\"answer_kind\" IS NULL\n        AND \"option_follow_up_prompts\".\"required_answer\" IS NULL\n        AND \"option_follow_up_prompts\".\"effect\" IS NULL\n        AND \"option_follow_up_prompts\".\"input_kind\" IS NULL\n      ) OR (\n        \"option_follow_up_prompts\".\"kind\" IN ('objective_condition', 'conduct_confirmation')\n        AND \"option_follow_up_prompts\".\"rule_status\" = 'mapped'\n        AND \"option_follow_up_prompts\".\"answer_kind\" = 'yes_no_unsure'\n        AND \"option_follow_up_prompts\".\"required_answer\" IN ('yes', 'no')\n        AND \"option_follow_up_prompts\".\"effect\" IS NULL\n        AND \"option_follow_up_prompts\".\"input_kind\" IS NULL\n      ) OR (\n        \"option_follow_up_prompts\".\"kind\" = 'consent_consideration'\n        AND \"option_follow_up_prompts\".\"rule_status\" = 'mapped'\n        AND \"option_follow_up_prompts\".\"answer_kind\" = 'yes_no_unsure'\n        AND \"option_follow_up_prompts\".\"required_answer\" IS NULL\n        AND \"option_follow_up_prompts\".\"effect\" = 'inform_deliberate_consent'\n        AND \"option_follow_up_prompts\".\"input_kind\" IS NULL\n      ) OR (\n        \"option_follow_up_prompts\".\"kind\" = 'local_detail'\n        AND \"option_follow_up_prompts\".\"rule_status\" = 'mapped'\n        AND \"option_follow_up_prompts\".\"answer_kind\" IS NULL\n        AND \"option_follow_up_prompts\".\"required_answer\" IS NULL\n        AND \"option_follow_up_prompts\".\"effect\" IS NULL\n        AND \"option_follow_up_prompts\".\"input_kind\" IN ('short_text', 'money')\n      )"
         }
       },
       "isRLSEnabled": false
@@ -1044,12 +1099,30 @@
         "archived"
       ]
     },
+    "public.follow_up_prompt_kind": {
+      "name": "follow_up_prompt_kind",
+      "schema": "public",
+      "values": [
+        "objective_condition",
+        "conduct_confirmation",
+        "consent_consideration",
+        "local_detail"
+      ]
+    },
     "public.objective_matter_classification": {
       "name": "objective_matter_classification",
       "schema": "public",
       "values": [
         "always_grave",
         "grave_when_conditions_met"
+      ]
+    },
+    "public.objective_matter_operator": {
+      "name": "objective_matter_operator",
+      "schema": "public",
+      "values": [
+        "all",
+        "any"
       ]
     },
     "public.response_kind": {

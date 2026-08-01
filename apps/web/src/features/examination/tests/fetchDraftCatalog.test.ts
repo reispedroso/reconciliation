@@ -9,7 +9,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { fetchDraftCatalog } from "../api/fetchDraftCatalog.js";
 
-const catalogCacheKey = "addiopeccati:editorial-catalog:0.3.0-draft";
+const catalogCacheKey = "addiopeccati:editorial-catalog:0.4.0-draft";
 const catalogPath = resolve(
   process.cwd(),
   "../../content/editorial/pt-BR/examination-catalog.v3.json",

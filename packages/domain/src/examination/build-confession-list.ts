@@ -1,35 +1,30 @@
-import type { AssessmentResult } from "./evaluate-item.js";
-
-export interface SummaryCandidate {
+export interface ConfessionListCandidate {
   readonly optionCode: string;
-  readonly pdfText: string;
-  readonly assessment: AssessmentResult;
+  readonly selected: boolean;
+  readonly text: string;
   readonly quantity?: string;
   readonly frequency?: string;
 }
 
-export interface ConfessionSummaryEntry {
+export interface ConfessionListEntry {
   readonly optionCode: string;
   readonly text: string;
   readonly quantity?: string;
   readonly frequency?: string;
 }
 
-export function buildConfessionSummary(
-  candidates: readonly SummaryCandidate[],
-): readonly ConfessionSummaryEntry[] {
+export function buildConfessionList(
+  candidates: readonly ConfessionListCandidate[],
+): readonly ConfessionListEntry[] {
   return candidates.flatMap((candidate) => {
-    if (
-      candidate.assessment.classification !== "mortal_sin" ||
-      !candidate.assessment.includeInMainSummary
-    ) {
+    if (!candidate.selected) {
       return [];
     }
 
     return [
       {
         optionCode: candidate.optionCode,
-        text: candidate.pdfText,
+        text: candidate.text,
         ...(candidate.quantity === undefined
           ? {}
           : { quantity: candidate.quantity }),

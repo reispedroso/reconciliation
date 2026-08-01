@@ -9,7 +9,7 @@ import { render, screen, within } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
-import { ExaminationPreview } from "../components/ExaminationPreview.js";
+import { Examination } from "../components/Examination.js";
 
 const catalogPath = resolve(
   process.cwd(),
@@ -45,10 +45,10 @@ function firstQuestionGroup(): HTMLElement {
   });
 }
 
-describe("ExaminationPreview", () => {
+describe("Examination", () => {
   it("shows one section at a time and advances without requiring an answer", async () => {
     const user = userEvent.setup();
-    render(<ExaminationPreview catalog={previewCatalog} />);
+    render(<Examination catalog={previewCatalog} />);
 
     expect(firstQuestionGroup()).toBeTruthy();
     expect(
@@ -61,13 +61,13 @@ describe("ExaminationPreview", () => {
       screen.getByRole("group", { name: /AMAR A DEUS SOBRE TODAS AS COISAS/ }),
     ).toBeTruthy();
     expect(
-      screen.getByText("Pode ser revisado depois"),
+      screen.getByText("Marque apenas o que realmente aconteceu"),
     ).toBeTruthy();
   });
 
   it("expands the three mortal sin criteria and links to the official source", async () => {
     const user = userEvent.setup();
-    render(<ExaminationPreview catalog={previewCatalog} />);
+    render(<Examination catalog={previewCatalog} />);
     const group = firstQuestionGroup();
     const trigger = within(group).getByRole("button", {
       name: /Entenda as três condições do pecado mortal/,
@@ -104,7 +104,7 @@ describe("ExaminationPreview", () => {
 
   it("keeps the compact criteria help preference between sections", async () => {
     const user = userEvent.setup();
-    render(<ExaminationPreview catalog={previewCatalog} />);
+    render(<Examination catalog={previewCatalog} />);
     const compactButton = screen.getByRole("button", {
       name: /Mostrar apenas o ícone de ajuda/,
     });
@@ -132,7 +132,7 @@ describe("ExaminationPreview", () => {
 
   it("keeps multiple affirmative options selected in the same group", async () => {
     const user = userEvent.setup();
-    render(<ExaminationPreview catalog={previewCatalog} />);
+    render(<Examination catalog={previewCatalog} />);
     const group = firstQuestionGroup();
     const concealedSin = asCheckbox(
       within(group).getByLabelText(/Escondi conscientemente/),
@@ -151,7 +151,7 @@ describe("ExaminationPreview", () => {
 
   it("clears and disables affirmative options when the denial is selected", async () => {
     const user = userEvent.setup();
-    render(<ExaminationPreview catalog={previewCatalog} />);
+    render(<Examination catalog={previewCatalog} />);
     const group = firstQuestionGroup();
     const concealedSin = asCheckbox(
       within(group).getByLabelText(/Escondi conscientemente/),
@@ -175,7 +175,7 @@ describe("ExaminationPreview", () => {
 
   it("retains a selection while navigating away and back", async () => {
     const user = userEvent.setup();
-    render(<ExaminationPreview catalog={previewCatalog} />);
+    render(<Examination catalog={previewCatalog} />);
     const concealedSin = asCheckbox(
       within(firstQuestionGroup()).getByLabelText(/Escondi conscientemente/),
     );
@@ -193,7 +193,7 @@ describe("ExaminationPreview", () => {
 
   it("restores the private state when the flow is remounted in the same tab", async () => {
     const user = userEvent.setup();
-    const firstRender = render(<ExaminationPreview catalog={previewCatalog} />);
+    const firstRender = render(<Examination catalog={previewCatalog} />);
     const concealedSin = asCheckbox(
       within(firstQuestionGroup()).getByLabelText(/Escondi conscientemente/),
     );
@@ -201,7 +201,7 @@ describe("ExaminationPreview", () => {
     await user.click(concealedSin);
     await user.click(screen.getByRole("button", { name: /Continuar/ }));
     firstRender.unmount();
-    render(<ExaminationPreview catalog={previewCatalog} />);
+    render(<Examination catalog={previewCatalog} />);
 
     expect(
       screen.getByRole("group", { name: /AMAR A DEUS SOBRE TODAS AS COISAS/ }),
@@ -218,7 +218,7 @@ describe("ExaminationPreview", () => {
 
   it("requires confirmation before clearing all private selections", async () => {
     const user = userEvent.setup();
-    render(<ExaminationPreview catalog={previewCatalog} />);
+    render(<Examination catalog={previewCatalog} />);
     const concealedSin = asCheckbox(
       within(firstQuestionGroup()).getByLabelText(/Escondi conscientemente/),
     );
@@ -238,23 +238,124 @@ describe("ExaminationPreview", () => {
     expect(screen.getByText("0 grupos revisados")).toBeTruthy();
   });
 
-  it("ends with an honest preview notice instead of a moral classification", async () => {
+  it("shows only selected affirmative items in the private confession list", async () => {
     const user = userEvent.setup();
-    render(<ExaminationPreview catalog={previewCatalog} />);
+    render(<Examination catalog={previewCatalog} />);
+    const group = firstQuestionGroup();
+
+    await user.click(within(group).getByLabelText(/Escondi conscientemente/));
+    await user.click(
+      within(group).getByLabelText(/Recebi a Sagrada Comunhão/),
+    );
+    await user.click(screen.getByRole("button", { name: /Continuar/ }));
+    await user.click(
+      screen.getByLabelText(/Não pratiquei nenhuma das condutas acima/),
+    );
+
+    for (let index = 2; index < previewCatalog.questions.length; index += 1) {
+      await user.click(screen.getByRole("button", { name: /Continuar/ }));
+    }
+
+    await user.click(
+      screen.getByRole("button", { name: "Ver lista para a confissão" }),
+    );
+
+    expect(
+      screen.getByRole("heading", {
+        name: "Pecados que você marcou para confessar",
+      }),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(
+        "Ocultei deliberadamente um pecado mortal em confissão.",
+      ),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(
+        "Recebi a Sagrada Comunhão consciente de estar em pecado mortal.",
+      ),
+    ).toBeTruthy();
+    expect(
+      screen.queryByText(/Não pratiquei nenhuma das condutas acima/),
+    ).toBeNull();
+    expect(
+      screen.getByText(/Se você sofre com escrúpulos/),
+    ).toBeTruthy();
+  });
+
+  it("clears all private examination data from the final screen after confirmation", async () => {
+    const user = userEvent.setup();
+    window.sessionStorage.setItem(
+      "addiopeccati:editorial-catalog:0.4.0-draft",
+      "cached catalog",
+    );
+    window.sessionStorage.setItem("unrelated-session-data", "preserve me");
+    render(<Examination catalog={previewCatalog} />);
+
+    await user.click(
+      within(firstQuestionGroup()).getByLabelText(/Escondi conscientemente/),
+    );
 
     for (let index = 1; index < previewCatalog.questions.length; index += 1) {
       await user.click(screen.getByRole("button", { name: /Continuar/ }));
     }
 
-    await user.click(screen.getByRole("button", { name: "Concluir revisão" }));
+    await user.click(
+      screen.getByRole("button", { name: "Ver lista para a confissão" }),
+    );
+    await user.click(
+      screen.getByRole("button", { name: "Encerrar e apagar" }),
+    );
 
     expect(
-      screen.getByRole("heading", {
-        name: "Você chegou ao final das seções",
-      }),
+      screen.getByText(
+        "Ocultei deliberadamente um pecado mortal em confissão.",
+      ),
     ).toBeTruthy();
     expect(
-      screen.getByText(/não constituem uma lista de pecados confirmados/),
+      screen.getByText(/não poderão ser recuperados/),
+    ).toBeTruthy();
+
+    await user.click(
+      screen.getByRole("button", { name: "Sim, apagar tudo" }),
+    );
+
+    expect(
+      screen.getByText(/Tudo foi apagado.*Não restam marcações/s),
+    ).toBeTruthy();
+    expect(
+      asCheckbox(
+        within(firstQuestionGroup()).getByLabelText(/Escondi conscientemente/),
+      ).checked,
+    ).toBe(false);
+    expect(
+      window.sessionStorage.getItem("addiopeccati:examination-session:v1"),
+    ).toBeNull();
+    expect(
+      window.sessionStorage.getItem(
+        "addiopeccati:editorial-catalog:0.4.0-draft",
+      ),
+    ).toBeNull();
+    expect(window.sessionStorage.getItem("unrelated-session-data")).toBe(
+      "preserve me",
+    );
+  });
+
+  it("does not encourage filling the list when nothing was selected", async () => {
+    const user = userEvent.setup();
+    render(<Examination catalog={previewCatalog} />);
+
+    for (let index = 1; index < previewCatalog.questions.length; index += 1) {
+      await user.click(screen.getByRole("button", { name: /Continuar/ }));
+    }
+
+    await user.click(
+      screen.getByRole("button", { name: "Ver lista para a confissão" }),
+    );
+
+    expect(screen.getByText("Nenhum item foi marcado")).toBeTruthy();
+    expect(
+      screen.getByText(/Não marque algo apenas para preencher a lista/),
     ).toBeTruthy();
   });
 });

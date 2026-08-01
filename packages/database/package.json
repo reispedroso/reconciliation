@@ -16,7 +16,7 @@
     "drizzle"
   ],
   "scripts": {
-    "check": "tsc --project tsconfig.json --noEmit",
+    "check": "pnpm --filter @addiopeccati/contracts build && tsc --project tsconfig.json --noEmit",
     "test": "vitest run --passWithNoTests",
     "build": "tsc --project tsconfig.build.json",
     "db:generate": "drizzle-kit generate",
@@ -38,4 +38,3 @@
     "vitest": "^4.1.10"
   }
 }
-

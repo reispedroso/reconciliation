@@ -57,7 +57,7 @@ function createRecord(): PublishedCatalogRecord {
               ? option.objectiveMatter.operator
               : null,
           summaryIncludeWhen: option.summary.includeWhen,
-          summaryPdfText: option.summary.pdfText,
+          summaryText: option.summary.text,
           summaryAskQuantity: option.summary.askQuantity,
           summaryAskFrequency: option.summary.askFrequency,
           summaryBehavior: null,
@@ -141,7 +141,7 @@ function createRecord(): PublishedCatalogRecord {
           objectiveMatterClassification: null,
           objectiveMatterOperator: null,
           summaryIncludeWhen: null,
-          summaryPdfText: null,
+          summaryText: null,
           summaryAskQuantity: null,
           summaryAskFrequency: null,
           summaryBehavior: option.summaryBehavior,
@@ -242,10 +242,10 @@ describe("published examination catalog mapper", () => {
       throw new Error("Expected an affirmative option fixture.");
     }
 
-    affirmation.summaryPdfText = null;
+    affirmation.summaryText = null;
 
     expect(() => mapPublishedExaminationCatalog(record)).toThrow(
-      /summaryPdfText/,
+      /summaryText/,
     );
   });
 });

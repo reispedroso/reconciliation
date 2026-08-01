@@ -1,5 +1,7 @@
 CREATE TYPE "public"."editorial_status" AS ENUM('draft', 'published', 'archived');--> statement-breakpoint
+CREATE TYPE "public"."follow_up_prompt_kind" AS ENUM('objective_condition', 'conduct_confirmation', 'consent_consideration', 'local_detail');--> statement-breakpoint
 CREATE TYPE "public"."objective_matter_classification" AS ENUM('always_grave', 'grave_when_conditions_met');--> statement-breakpoint
+CREATE TYPE "public"."objective_matter_operator" AS ENUM('all', 'any');--> statement-breakpoint
 CREATE TYPE "public"."response_kind" AS ENUM('affirmation', 'denial');--> statement-breakpoint
 CREATE TYPE "public"."rule_status" AS ENUM('requires_rule_mapping', 'mapped');--> statement-breakpoint
 CREATE TABLE "assessment_answers" (
@@ -68,8 +70,9 @@ CREATE TABLE "examination_options" (
 	"clear_affirmative_selections" boolean,
 	"disable_affirmative_options_while_selected" boolean,
 	"objective_matter_classification" "objective_matter_classification",
+	"objective_matter_operator" "objective_matter_operator",
 	"summary_include_when" text,
-	"summary_pdf_text" text,
+	"summary_text" text,
 	"summary_ask_quantity" boolean,
 	"summary_ask_frequency" boolean,
 	"summary_behavior" text,
@@ -81,8 +84,8 @@ CREATE TABLE "examination_options" (
         AND "examination_options"."exclusive" = false
         AND "examination_options"."starts_mortal_sin_assessment" = true
         AND "examination_options"."objective_matter_classification" IS NOT NULL
-        AND "examination_options"."summary_include_when" = 'mortal_sin'
-        AND "examination_options"."summary_pdf_text" IS NOT NULL
+        AND "examination_options"."summary_include_when" = 'selected'
+        AND "examination_options"."summary_text" IS NOT NULL
         AND "examination_options"."summary_ask_quantity" IS NOT NULL
         AND "examination_options"."summary_ask_frequency" IS NOT NULL
         AND "examination_options"."clear_affirmative_selections" IS NULL
@@ -97,7 +100,7 @@ CREATE TABLE "examination_options" (
         AND "examination_options"."starts_mortal_sin_assessment" IS NULL
         AND "examination_options"."objective_matter_classification" IS NULL
         AND "examination_options"."summary_include_when" IS NULL
-        AND "examination_options"."summary_pdf_text" IS NULL
+        AND "examination_options"."summary_text" IS NULL
         AND "examination_options"."summary_ask_quantity" IS NULL
         AND "examination_options"."summary_ask_frequency" IS NULL
       ))
@@ -138,6 +141,8 @@ CREATE TABLE "limitation_questions" (
 	"prompt" text NOT NULL,
 	"note" text NOT NULL,
 	"rule_status" "rule_status" NOT NULL,
+	"ask_before" text,
+	"effect" text,
 	CONSTRAINT "limitation_questions_catalog_version_id_unique" UNIQUE("catalog_version_id")
 );
 --> statement-breakpoint
@@ -166,9 +171,43 @@ CREATE TABLE "option_follow_up_prompts" (
 	"position" integer NOT NULL,
 	"prompt" text NOT NULL,
 	"rule_status" "rule_status" NOT NULL,
+	"kind" "follow_up_prompt_kind",
+	"answer_kind" text,
+	"required_answer" text,
+	"effect" text,
+	"input_kind" text,
 	CONSTRAINT "option_follow_up_prompts_option_code_unique" UNIQUE("option_id","code"),
-	CONSTRAINT "option_follow_up_prompts_option_position_unique" UNIQUE("option_id","position"),
-	CONSTRAINT "option_follow_up_prompts_position_check" CHECK ("option_follow_up_prompts"."position" >= 0)
+	CONSTRAINT "option_follow_up_prompts_option_kind_position_unique" UNIQUE("option_id","kind","position"),
+	CONSTRAINT "option_follow_up_prompts_position_check" CHECK ("option_follow_up_prompts"."position" >= 0),
+	CONSTRAINT "option_follow_up_prompts_shape_check" CHECK ((
+        "option_follow_up_prompts"."kind" IS NULL
+        AND "option_follow_up_prompts"."rule_status" = 'requires_rule_mapping'
+        AND "option_follow_up_prompts"."answer_kind" IS NULL
+        AND "option_follow_up_prompts"."required_answer" IS NULL
+        AND "option_follow_up_prompts"."effect" IS NULL
+        AND "option_follow_up_prompts"."input_kind" IS NULL
+      ) OR (
+        "option_follow_up_prompts"."kind" IN ('objective_condition', 'conduct_confirmation')
+        AND "option_follow_up_prompts"."rule_status" = 'mapped'
+        AND "option_follow_up_prompts"."answer_kind" = 'yes_no_unsure'
+        AND "option_follow_up_prompts"."required_answer" IN ('yes', 'no')
+        AND "option_follow_up_prompts"."effect" IS NULL
+        AND "option_follow_up_prompts"."input_kind" IS NULL
+      ) OR (
+        "option_follow_up_prompts"."kind" = 'consent_consideration'
+        AND "option_follow_up_prompts"."rule_status" = 'mapped'
+        AND "option_follow_up_prompts"."answer_kind" = 'yes_no_unsure'
+        AND "option_follow_up_prompts"."required_answer" IS NULL
+        AND "option_follow_up_prompts"."effect" = 'inform_deliberate_consent'
+        AND "option_follow_up_prompts"."input_kind" IS NULL
+      ) OR (
+        "option_follow_up_prompts"."kind" = 'local_detail'
+        AND "option_follow_up_prompts"."rule_status" = 'mapped'
+        AND "option_follow_up_prompts"."answer_kind" IS NULL
+        AND "option_follow_up_prompts"."required_answer" IS NULL
+        AND "option_follow_up_prompts"."effect" IS NULL
+        AND "option_follow_up_prompts"."input_kind" IN ('short_text', 'money')
+      ))
 );
 --> statement-breakpoint
 ALTER TABLE "assessment_answers" ADD CONSTRAINT "assessment_answers_assessment_question_id_assessment_questions_id_fk" FOREIGN KEY ("assessment_question_id") REFERENCES "public"."assessment_questions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint

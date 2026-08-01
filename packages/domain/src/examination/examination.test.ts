@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildConfessionSummary } from "./build-summary.js";
+import { buildConfessionList } from "./build-confession-list.js";
 import { evaluateItem } from "./evaluate-item.js";
 import type { ExaminationQuestionDefinition } from "./model.js";
 import { isOptionDisabled, selectOption } from "./select-option.js";
@@ -15,14 +15,14 @@ const syntheticQuestion = {
       label: "Pratiquei a primeira conduta.",
       responseKind: "affirmation",
       exclusive: false,
-      summary: { pdfText: "Pratiquei a primeira conduta." },
+      summary: { text: "Pratiquei a primeira conduta." },
     },
     {
       code: "affirmative-two",
       label: "Pratiquei a segunda conduta.",
       responseKind: "affirmation",
       exclusive: false,
-      summary: { pdfText: "Pratiquei a segunda conduta." },
+      summary: { text: "Pratiquei a segunda conduta." },
     },
     {
       code: "none-of-the-above",
@@ -139,44 +139,20 @@ describe("item assessment", () => {
   });
 });
 
-describe("confession summary", () => {
-  it("includes only items classified as mortal sin", () => {
-    const mortalAssessment = evaluateItem({
-      conductConfirmed: true,
-      objectiveMatter: "grave_matter",
-      fullKnowledge: "yes",
-      deliberateConsent: "yes",
-    });
-    const pendingAssessment = evaluateItem({
-      conductConfirmed: true,
-      objectiveMatter: "grave_matter",
-      fullKnowledge: "unsure",
-      deliberateConsent: "yes",
-    });
-    const negativeAssessment = evaluateItem({
-      conductConfirmed: false,
-      objectiveMatter: "pending",
-      fullKnowledge: "unanswered",
-      deliberateConsent: "unanswered",
-    });
-
+describe("confession list", () => {
+  it("includes only selected affirmative items", () => {
     expect(
-      buildConfessionSummary([
+      buildConfessionList([
         {
           optionCode: "affirmative-one",
-          pdfText: "Pratiquei a primeira conduta.",
-          assessment: mortalAssessment,
+          selected: true,
+          text: "Pratiquei a primeira conduta.",
           frequency: "algumas vezes",
         },
         {
           optionCode: "affirmative-two",
-          pdfText: "Pratiquei a segunda conduta.",
-          assessment: pendingAssessment,
-        },
-        {
-          optionCode: "none-of-the-above",
-          pdfText: "Não pratiquei nenhuma das condutas.",
-          assessment: negativeAssessment,
+          selected: false,
+          text: "Pratiquei a segunda conduta.",
         },
       ]),
     ).toEqual([

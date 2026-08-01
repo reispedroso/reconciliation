@@ -8,7 +8,7 @@ export interface ExaminationOptionDefinition {
   readonly responseKind: ResponseKind;
   readonly exclusive: boolean;
   readonly summary?: {
-    readonly pdfText: string;
+    readonly text: string;
   };
 }
 

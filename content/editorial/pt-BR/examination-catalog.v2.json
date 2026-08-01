@@ -130,7 +130,7 @@
       "document": "Código de Direito Canônico",
       "locator": "cân. 988 §1-2",
       "authorityLevel": "Lei universal da Igreja",
-      "officialUrl": "https://www.vatican.va/archive/cod-iuris-canonici/portuguese/codex-iuris-canonici_po.pdf"
+      "officialUrl": "https://press.vatican.va/archive/cdc/index_po.htm"
     },
     {
       "code": "humanae-vitae-14",
@@ -153,7 +153,7 @@
       "position": 0,
       "title": "CONFISSÃO E EUCARISTIA",
       "prompt": "Desde a sua última confissão bem-feita, aconteceu alguma destas situações?",
-      "helpText": "Marcar uma opção apenas inicia a avaliação. O item só irá ao PDF principal quando matéria grave, plena consciência e consentimento deliberado forem confirmados.",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
       "control": "checkbox_group",
       "selectionMode": "multiple",
       "options": [
@@ -169,8 +169,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Ocultei deliberadamente um pecado mortal em confissão.",
+            "includeWhen": "selected",
+            "text": "Ocultei deliberadamente um pecado mortal em confissão.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -192,8 +192,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Recebi a Sagrada Comunhão consciente de estar em pecado mortal.",
+            "includeWhen": "selected",
+            "text": "Recebi a Sagrada Comunhão consciente de estar em pecado mortal.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -228,8 +228,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Cometi sacrilégio grave.",
+            "includeWhen": "selected",
+            "text": "Cometi sacrilégio grave.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -255,7 +255,7 @@
       "position": 1,
       "title": "PRIMEIRO MANDAMENTO — AMAR A DEUS SOBRE TODAS AS COISAS",
       "prompt": "Pratiquei alguma destas condutas gravemente contrárias à fé, à esperança, à caridade ou ao culto devido a Deus?",
-      "helpText": "Marcar uma opção apenas inicia a avaliação. O item só irá ao PDF principal quando matéria grave, plena consciência e consentimento deliberado forem confirmados.",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
       "control": "checkbox_group",
       "selectionMode": "multiple",
       "options": [
@@ -271,8 +271,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Abandonei deliberadamente a fé cristã.",
+            "includeWhen": "selected",
+            "text": "Abandonei deliberadamente a fé cristã.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -306,8 +306,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Neguei obstinadamente uma verdade da fé católica.",
+            "includeWhen": "selected",
+            "text": "Neguei obstinadamente uma verdade da fé católica.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -335,8 +335,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Rompi deliberadamente a comunhão com a Igreja.",
+            "includeWhen": "selected",
+            "text": "Rompi deliberadamente a comunhão com a Igreja.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -357,8 +357,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Pratiquei idolatria.",
+            "includeWhen": "selected",
+            "text": "Pratiquei idolatria.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -379,8 +379,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Invoquei demônios ou participei de culto satânico.",
+            "includeWhen": "selected",
+            "text": "Invoquei demônios ou participei de culto satânico.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -401,8 +401,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Pratiquei magia ou feitiçaria.",
+            "includeWhen": "selected",
+            "text": "Pratiquei magia ou feitiçaria.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -436,8 +436,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Recorri deliberadamente a práticas graves de adivinhação ou espiritismo.",
+            "includeWhen": "selected",
+            "text": "Recorri deliberadamente a práticas graves de adivinhação ou espiritismo.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -465,8 +465,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Desesperei deliberadamente da salvação ou do perdão de Deus.",
+            "includeWhen": "selected",
+            "text": "Desesperei deliberadamente da salvação ou do perdão de Deus.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -487,8 +487,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Pequei por presunção, contando com o perdão sem conversão.",
+            "includeWhen": "selected",
+            "text": "Pequei por presunção, contando com o perdão sem conversão.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -509,8 +509,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Alimentei deliberadamente ódio contra Deus.",
+            "includeWhen": "selected",
+            "text": "Alimentei deliberadamente ódio contra Deus.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -538,8 +538,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Cometi simonia.",
+            "includeWhen": "selected",
+            "text": "Cometi simonia.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -565,7 +565,7 @@
       "position": 2,
       "title": "SEGUNDO MANDAMENTO — NÃO TOMAR O SANTO NOME DE DEUS EM VÃO",
       "prompt": "Pratiquei alguma destas ofensas graves ao nome de Deus?",
-      "helpText": "Marcar uma opção apenas inicia a avaliação. O item só irá ao PDF principal quando matéria grave, plena consciência e consentimento deliberado forem confirmados.",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
       "control": "checkbox_group",
       "selectionMode": "multiple",
       "options": [
@@ -581,8 +581,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Cometi blasfêmia.",
+            "includeWhen": "selected",
+            "text": "Cometi blasfêmia.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -603,8 +603,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Cometi perjúrio.",
+            "includeWhen": "selected",
+            "text": "Cometi perjúrio.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -632,8 +632,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Usei o nome de Deus para prometer ou justificar uma ação gravemente má.",
+            "includeWhen": "selected",
+            "text": "Usei o nome de Deus para prometer ou justificar uma ação gravemente má.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -659,7 +659,7 @@
       "position": 3,
       "title": "TERCEIRO MANDAMENTO — SANTIFICAR OS DOMINGOS E FESTAS DE GUARDA",
       "prompt": "Deixei deliberadamente de cumprir o preceito da Missa?",
-      "helpText": "Marcar uma opção apenas inicia a avaliação. O item só irá ao PDF principal quando matéria grave, plena consciência e consentimento deliberado forem confirmados.",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
       "control": "checkbox_group",
       "selectionMode": "multiple",
       "options": [
@@ -688,8 +688,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Faltei deliberadamente à Missa de preceito sem motivo sério.",
+            "includeWhen": "selected",
+            "text": "Faltei deliberadamente à Missa de preceito sem motivo sério.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -723,8 +723,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Impedí alguém sob minha responsabilidade de participar da Missa de preceito.",
+            "includeWhen": "selected",
+            "text": "Impedí alguém sob minha responsabilidade de participar da Missa de preceito.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -750,7 +750,7 @@
       "position": 4,
       "title": "QUARTO MANDAMENTO — HONRAR PAI E MÃE E CUMPRIR DEVERES FAMILIARES GRAVES",
       "prompt": "Descumpri gravemente algum dever de justiça e caridade para com pais, filhos, cônjuge ou dependentes?",
-      "helpText": "Marcar uma opção apenas inicia a avaliação. O item só irá ao PDF principal quando matéria grave, plena consciência e consentimento deliberado forem confirmados.",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
       "control": "checkbox_group",
       "selectionMode": "multiple",
       "options": [
@@ -779,8 +779,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Abandonei meus pais em necessidade grave, embora pudesse ajudá-los.",
+            "includeWhen": "selected",
+            "text": "Abandonei meus pais em necessidade grave, embora pudesse ajudá-los.",
             "askQuantity": false,
             "askFrequency": false
           },
@@ -814,8 +814,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Negligenciei gravemente os cuidados devidos a filho ou dependente.",
+            "includeWhen": "selected",
+            "text": "Negligenciei gravemente os cuidados devidos a filho ou dependente.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -849,8 +849,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Negligenciei gravemente a formação cristã dos meus filhos.",
+            "includeWhen": "selected",
+            "text": "Negligenciei gravemente a formação cristã dos meus filhos.",
             "askQuantity": false,
             "askFrequency": false
           },
@@ -878,8 +878,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Maltratei gravemente um familiar ou dependente.",
+            "includeWhen": "selected",
+            "text": "Maltratei gravemente um familiar ou dependente.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -913,8 +913,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Abandonei injustamente minha família ou dependentes, causando dano grave.",
+            "includeWhen": "selected",
+            "text": "Abandonei injustamente minha família ou dependentes, causando dano grave.",
             "askQuantity": false,
             "askFrequency": false
           },
@@ -948,8 +948,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Desobedeci gravemente a uma autoridade legítima em matéria grave.",
+            "includeWhen": "selected",
+            "text": "Desobedeci gravemente a uma autoridade legítima em matéria grave.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -975,7 +975,7 @@
       "position": 5,
       "title": "QUINTO MANDAMENTO — NÃO MATAR NEM CAUSAR DANO GRAVE",
       "prompt": "Pratiquei alguma destas condutas gravemente contrárias à vida, à integridade ou à caridade?",
-      "helpText": "Marcar uma opção apenas inicia a avaliação. O item só irá ao PDF principal quando matéria grave, plena consciência e consentimento deliberado forem confirmados.",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
       "control": "checkbox_group",
       "selectionMode": "multiple",
       "options": [
@@ -991,8 +991,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Cometi ou tentei cometer homicídio voluntário.",
+            "includeWhen": "selected",
+            "text": "Cometi ou tentei cometer homicídio voluntário.",
             "askQuantity": true,
             "askFrequency": false
           },
@@ -1013,8 +1013,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Pratiquei ou cooperei formalmente para um aborto.",
+            "includeWhen": "selected",
+            "text": "Pratiquei ou cooperei formalmente para um aborto.",
             "askQuantity": true,
             "askFrequency": false
           },
@@ -1035,8 +1035,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Pratiquei ou cooperei diretamente para eutanásia.",
+            "includeWhen": "selected",
+            "text": "Pratiquei ou cooperei diretamente para eutanásia.",
             "askQuantity": true,
             "askFrequency": false
           },
@@ -1064,8 +1064,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Tentei tirar a própria vida.",
+            "includeWhen": "selected",
+            "text": "Tentei tirar a própria vida.",
             "askQuantity": true,
             "askFrequency": false
           },
@@ -1099,8 +1099,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Causei violência ou lesão grave a outra pessoa.",
+            "includeWhen": "selected",
+            "text": "Causei violência ou lesão grave a outra pessoa.",
             "askQuantity": true,
             "askFrequency": true
           },
@@ -1134,8 +1134,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Coloquei vidas em sério risco por imprudência grave.",
+            "includeWhen": "selected",
+            "text": "Coloquei vidas em sério risco por imprudência grave.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1169,8 +1169,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Usei drogas ilícitas.",
+            "includeWhen": "selected",
+            "text": "Usei drogas ilícitas.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1191,8 +1191,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Produzi, vendi ou distribuí drogas ilícitas.",
+            "includeWhen": "selected",
+            "text": "Produzi, vendi ou distribuí drogas ilícitas.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1220,8 +1220,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Embriaguei-me deliberadamente de modo grave.",
+            "includeWhen": "selected",
+            "text": "Embriaguei-me deliberadamente de modo grave.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1255,8 +1255,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Levei deliberadamente outra pessoa a cometer pecado grave.",
+            "includeWhen": "selected",
+            "text": "Levei deliberadamente outra pessoa a cometer pecado grave.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1284,8 +1284,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Desejei deliberadamente um mal grave a outra pessoa.",
+            "includeWhen": "selected",
+            "text": "Desejei deliberadamente um mal grave a outra pessoa.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1319,8 +1319,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Recusei ajuda possível a alguém em perigo grave.",
+            "includeWhen": "selected",
+            "text": "Recusei ajuda possível a alguém em perigo grave.",
             "askQuantity": false,
             "askFrequency": false
           },
@@ -1346,7 +1346,7 @@
       "position": 6,
       "title": "SEXTO E NONO MANDAMENTOS — CASTIDADE NOS ATOS, PENSAMENTOS E DESEJOS",
       "prompt": "Pratiquei ou consenti deliberadamente em alguma destas condutas gravemente contrárias à castidade?",
-      "helpText": "Não marque tentações, imagens involuntárias, reações corporais não escolhidas ou pensamentos imediatamente rejeitados. Marcar uma opção apenas inicia a avaliação das três condições do pecado mortal.",
+      "helpText": "Não marque tentações, imagens involuntárias, reações corporais não escolhidas ou pensamentos imediatamente rejeitados. Se uma dúvida vier do escrúpulo, siga a orientação do seu confessor.",
       "control": "checkbox_group",
       "selectionMode": "multiple",
       "options": [
@@ -1362,8 +1362,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Tive relações sexuais fora do matrimônio.",
+            "includeWhen": "selected",
+            "text": "Tive relações sexuais fora do matrimônio.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1384,8 +1384,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Cometi adultério.",
+            "includeWhen": "selected",
+            "text": "Cometi adultério.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1406,8 +1406,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Pratiquei atos sexuais com pessoa do mesmo sexo.",
+            "includeWhen": "selected",
+            "text": "Pratiquei atos sexuais com pessoa do mesmo sexo.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1435,8 +1435,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Pratiquei masturbação.",
+            "includeWhen": "selected",
+            "text": "Pratiquei masturbação.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1457,8 +1457,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Busquei ou divulguei pornografia.",
+            "includeWhen": "selected",
+            "text": "Busquei ou divulguei pornografia.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1486,8 +1486,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Recorri à prostituição ou a explorei.",
+            "includeWhen": "selected",
+            "text": "Recorri à prostituição ou a explorei.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1508,8 +1508,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Cometi violência ou coerção sexual.",
+            "includeWhen": "selected",
+            "text": "Cometi violência ou coerção sexual.",
             "askQuantity": true,
             "askFrequency": true
           },
@@ -1530,8 +1530,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Cometi ato sexual de especial gravidade.",
+            "includeWhen": "selected",
+            "text": "Cometi ato sexual de especial gravidade.",
             "askQuantity": true,
             "askFrequency": true
           },
@@ -1565,8 +1565,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Pratiquei atos deliberados de prazer sexual fora do matrimônio.",
+            "includeWhen": "selected",
+            "text": "Pratiquei atos deliberados de prazer sexual fora do matrimônio.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1600,8 +1600,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Consenti deliberadamente em desejos sexuais gravemente ilícitos.",
+            "includeWhen": "selected",
+            "text": "Consenti deliberadamente em desejos sexuais gravemente ilícitos.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1622,8 +1622,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Usei contracepção no ato conjugal.",
+            "includeWhen": "selected",
+            "text": "Usei contracepção no ato conjugal.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -1652,8 +1652,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Procurei esterilização direta para impedir a procriação.",
+            "includeWhen": "selected",
+            "text": "Procurei esterilização direta para impedir a procriação.",
             "askQuantity": false,
             "askFrequency": false
           },
@@ -1687,8 +1687,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Recorri a técnica de procriação que substitui o ato conjugal.",
+            "includeWhen": "selected",
+            "text": "Recorri a técnica de procriação que substitui o ato conjugal.",
             "askQuantity": false,
             "askFrequency": false
           },
@@ -1715,7 +1715,7 @@
       "position": 7,
       "title": "SÉTIMO E DÉCIMO MANDAMENTOS — JUSTIÇA NOS BENS E DIREITOS DO PRÓXIMO",
       "prompt": "Pratiquei alguma injustiça grave contra os bens, o trabalho ou os direitos de outra pessoa?",
-      "helpText": "Marcar uma opção apenas inicia a avaliação. O item só irá ao PDF principal quando matéria grave, plena consciência e consentimento deliberado forem confirmados.",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
       "control": "checkbox_group",
       "selectionMode": "multiple",
       "options": [
@@ -1750,8 +1750,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Roubei ou retive injustamente bens de valor relevante.",
+            "includeWhen": "selected",
+            "text": "Roubei ou retive injustamente bens de valor relevante.",
             "askQuantity": true,
             "askFrequency": true
           },
@@ -1785,8 +1785,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Cometi fraude, corrupção ou desvio grave de recursos.",
+            "includeWhen": "selected",
+            "text": "Cometi fraude, corrupção ou desvio grave de recursos.",
             "askQuantity": true,
             "askFrequency": true
           },
@@ -1820,8 +1820,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Cometi grave injustiça no pagamento ou tratamento de trabalhadores.",
+            "includeWhen": "selected",
+            "text": "Cometi grave injustiça no pagamento ou tratamento de trabalhadores.",
             "askQuantity": true,
             "askFrequency": true
           },
@@ -1855,8 +1855,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Causei deliberadamente dano grave à propriedade alheia.",
+            "includeWhen": "selected",
+            "text": "Causei deliberadamente dano grave à propriedade alheia.",
             "askQuantity": true,
             "askFrequency": true
           },
@@ -1896,8 +1896,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Retive injustamente dívida ou bem importante.",
+            "includeWhen": "selected",
+            "text": "Retive injustamente dívida ou bem importante.",
             "askQuantity": true,
             "askFrequency": false
           },
@@ -1925,8 +1925,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Comprometi necessidades essenciais por meio de jogo ou apostas.",
+            "includeWhen": "selected",
+            "text": "Comprometi necessidades essenciais por meio de jogo ou apostas.",
             "askQuantity": true,
             "askFrequency": true
           },
@@ -1947,8 +1947,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Participei de tráfico ou exploração grave de pessoas.",
+            "includeWhen": "selected",
+            "text": "Participei de tráfico ou exploração grave de pessoas.",
             "askQuantity": true,
             "askFrequency": true
           },
@@ -1982,8 +1982,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Lucrei conscientemente com bens roubados de valor relevante.",
+            "includeWhen": "selected",
+            "text": "Lucrei conscientemente com bens roubados de valor relevante.",
             "askQuantity": true,
             "askFrequency": true
           },
@@ -2009,7 +2009,7 @@
       "position": 8,
       "title": "OITAVO MANDAMENTO — NÃO LEVANTAR FALSO TESTEMUNHO NEM CAUSAR GRAVE DANO PELA MENTIRA",
       "prompt": "Faltei gravemente à verdade, à justiça ou à reputação do próximo?",
-      "helpText": "Marcar uma opção apenas inicia a avaliação. O item só irá ao PDF principal quando matéria grave, plena consciência e consentimento deliberado forem confirmados.",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
       "control": "checkbox_group",
       "selectionMode": "multiple",
       "options": [
@@ -2025,8 +2025,8 @@
           },
           "followUpPrompts": [],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Dei falso testemunho ou cometi perjúrio com grave dano à justiça.",
+            "includeWhen": "selected",
+            "text": "Dei falso testemunho ou cometi perjúrio com grave dano à justiça.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -2060,8 +2060,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Menti causando grave dano.",
+            "includeWhen": "selected",
+            "text": "Menti causando grave dano.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -2095,8 +2095,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Caluniei alguém causando grave dano.",
+            "includeWhen": "selected",
+            "text": "Caluniei alguém causando grave dano.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -2130,8 +2130,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Revelei sem justa causa faltas graves de alguém, causando sério dano.",
+            "includeWhen": "selected",
+            "text": "Revelei sem justa causa faltas graves de alguém, causando sério dano.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -2165,8 +2165,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Revelei segredo importante sem justa causa, causando grave dano.",
+            "includeWhen": "selected",
+            "text": "Revelei segredo importante sem justa causa, causando grave dano.",
             "askQuantity": false,
             "askFrequency": true
           },
@@ -2200,8 +2200,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Falsifiquei ou usei documento falso causando grave injustiça.",
+            "includeWhen": "selected",
+            "text": "Falsifiquei ou usei documento falso causando grave injustiça.",
             "askQuantity": true,
             "askFrequency": true
           },
@@ -2235,8 +2235,8 @@
             }
           ],
           "summary": {
-            "includeWhen": "mortal_sin",
-            "pdfText": "Omiti uma verdade que tinha grave dever de revelar, permitindo grave injustiça.",
+            "includeWhen": "selected",
+            "text": "Omiti uma verdade que tinha grave dever de revelar, permitindo grave injustiça.",
             "askQuantity": false,
             "askFrequency": true
           },

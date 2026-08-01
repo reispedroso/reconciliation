@@ -1,2 +1,0 @@
-ALTER TABLE "option_follow_up_prompts" DROP CONSTRAINT "option_follow_up_prompts_option_position_unique";--> statement-breakpoint
-ALTER TABLE "option_follow_up_prompts" ADD CONSTRAINT "option_follow_up_prompts_option_kind_position_unique" UNIQUE("option_id","kind","position");

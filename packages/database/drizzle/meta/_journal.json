@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1785366309737,
-      "tag": "0000_jittery_may_parker",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1785549186044,
-      "tag": "0001_wooden_dust",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1785549602530,
-      "tag": "0002_familiar_apocalypse",
+      "when": 1785584625277,
+      "tag": "0000_chilly_scourge",
       "breakpoints": true
     }
   ]
