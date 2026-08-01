@@ -4,6 +4,8 @@ import { describe, expect, it } from "vitest";
 
 import {
   currentExaminationCatalogQuerySchema,
+  draftExaminationCatalogPreviewQuerySchema,
+  draftExaminationCatalogPreviewSchema,
   examinationCatalogSchema,
   publishedExaminationCatalogSchema,
 } from "./examination-catalog.js";
@@ -48,6 +50,26 @@ describe("examination catalog contract", () => {
     expect("sourceArtifact" in publishedCatalog).toBe(false);
   });
 
+  it("validates a draft preview without exposing seed metadata", () => {
+    const {
+      editorial: _editorial,
+      sourceArtifact: _sourceArtifact,
+      ...catalogContent
+    } = catalog;
+    const preview = {
+      ...catalogContent,
+      preview: {
+        status: "draft",
+        requiresClericalReview: true,
+      },
+    };
+
+    expect(draftExaminationCatalogPreviewSchema.safeParse(preview).success).toBe(
+      true,
+    );
+    expect("sourceArtifact" in preview).toBe(false);
+  });
+
   it("accepts only the supported public locale", () => {
     expect(
       currentExaminationCatalogQuerySchema.safeParse({ locale: "pt-BR" })
@@ -56,6 +78,21 @@ describe("examination catalog contract", () => {
     expect(
       currentExaminationCatalogQuerySchema.safeParse({ locale: "en-US" })
         .success,
+    ).toBe(false);
+  });
+
+  it("requires an explicit draft version for preview", () => {
+    expect(
+      draftExaminationCatalogPreviewQuerySchema.safeParse({
+        locale: "pt-BR",
+        catalogVersion: "0.3.0-draft",
+      }).success,
+    ).toBe(true);
+    expect(
+      draftExaminationCatalogPreviewQuerySchema.safeParse({
+        locale: "pt-BR",
+        catalogVersion: "0.3.0",
+      }).success,
     ).toBe(false);
   });
 

@@ -304,6 +304,34 @@ export const currentExaminationCatalogQuerySchema = z.strictObject({
   locale: z.literal("pt-BR"),
 });
 
+export const draftExaminationCatalogPreviewQuerySchema = z.strictObject({
+  locale: z.literal("pt-BR"),
+  catalogVersion: z.string().regex(/^\d+\.\d+\.\d+-draft$/),
+});
+
+export const draftExaminationCatalogPreviewSchema = z
+  .strictObject({
+    schemaVersion: z.literal("3.0.0"),
+    catalogVersion: z.string().regex(/^\d+\.\d+\.\d+-draft$/),
+    locale: z.literal("pt-BR"),
+    title: z.string().min(1),
+    purpose: z.string().min(1),
+    globalNotice: z.string().min(1),
+    mortalSinResultMessage: z.string().min(1),
+    preview: z.strictObject({
+      status: z.literal("draft"),
+      requiresClericalReview: z.literal(true),
+    }),
+    assessment: z.strictObject({
+      fullKnowledge: assessmentQuestionSchema,
+      deliberateConsent: assessmentQuestionSchema,
+      limitations: limitationsSchema,
+    }),
+    doctrinalSources: z.array(doctrinalSourceSchema).min(1),
+    questions: z.array(questionSchema).min(1),
+  })
+  .superRefine(addCatalogIssues);
+
 export const publishedExaminationCatalogSchema = z
   .strictObject({
     schemaVersion: z.literal("3.0.0"),
@@ -349,6 +377,12 @@ export type DenialOption = Extract<
 >;
 export type CurrentExaminationCatalogQuery = z.infer<
   typeof currentExaminationCatalogQuerySchema
+>;
+export type DraftExaminationCatalogPreviewQuery = z.infer<
+  typeof draftExaminationCatalogPreviewQuerySchema
+>;
+export type DraftExaminationCatalogPreview = z.infer<
+  typeof draftExaminationCatalogPreviewSchema
 >;
 export type PublishedExaminationCatalog = z.infer<
   typeof publishedExaminationCatalogSchema

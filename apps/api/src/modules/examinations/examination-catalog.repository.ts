@@ -1,4 +1,7 @@
-import type { CurrentExaminationCatalogQuery } from "@confession/contracts";
+import type {
+  CurrentExaminationCatalogQuery,
+  DraftExaminationCatalogPreviewQuery,
+} from "@confession/contracts";
 import {
   assessmentAnswers,
   assessmentQuestions,
@@ -15,20 +18,51 @@ import {
 import { and, asc, desc, eq } from "drizzle-orm";
 
 import {
+  mapDraftExaminationCatalogPreview,
   mapPublishedExaminationCatalog,
   type PublishedCatalogRecord,
 } from "./examination-catalog.mapper.js";
-import type { PublishedExaminationCatalogRepository } from "./examination-catalog.service.js";
+import type {
+  DraftExaminationCatalogPreviewRepository,
+  PublishedExaminationCatalogRepository,
+} from "./examination-catalog.service.js";
 
 export class DrizzlePublishedExaminationCatalogRepository
-  implements PublishedExaminationCatalogRepository
+  implements
+    PublishedExaminationCatalogRepository,
+    DraftExaminationCatalogPreviewRepository
 {
   public constructor(private readonly database: Database) {}
 
   public async findCurrentPublishedByLocale(
     locale: CurrentExaminationCatalogQuery["locale"],
   ) {
-    const record = await this.database.transaction(async (transaction) => {
+    const record = await this.findCatalogRecord(locale, "published");
+
+    return record === null ? null : mapPublishedExaminationCatalog(record);
+  }
+
+  public async findDraftByVersion({
+    locale,
+    catalogVersion,
+  }: DraftExaminationCatalogPreviewQuery) {
+    const record = await this.findCatalogRecord(
+      locale,
+      "draft",
+      catalogVersion,
+    );
+
+    return record === null
+      ? null
+      : mapDraftExaminationCatalogPreview(record);
+  }
+
+  private async findCatalogRecord(
+    locale: CurrentExaminationCatalogQuery["locale"],
+    status: "draft" | "published",
+    catalogVersion?: string,
+  ): Promise<PublishedCatalogRecord | null> {
+    return this.database.transaction(async (transaction) => {
       const [catalog] = await transaction
         .select({
           id: editorialCatalogVersions.id,
@@ -47,25 +81,25 @@ export class DrizzlePublishedExaminationCatalogRepository
         .where(
           and(
             eq(editorialCatalogVersions.locale, locale),
-            eq(editorialCatalogVersions.status, "published"),
+            eq(editorialCatalogVersions.status, status),
+            catalogVersion === undefined
+              ? undefined
+              : eq(
+                  editorialCatalogVersions.catalogVersion,
+                  catalogVersion,
+                ),
           ),
         )
-        .orderBy(desc(editorialCatalogVersions.publishedAt))
+        .orderBy(
+          status === "published"
+            ? desc(editorialCatalogVersions.publishedAt)
+            : desc(editorialCatalogVersions.createdAt),
+        )
         .limit(1);
 
-      if (
-        catalog === undefined ||
-        catalog.reviewedAt === null ||
-        catalog.publishedAt === null
-      ) {
+      if (catalog === undefined) {
         return null;
       }
-
-      const publishedCatalog = {
-        ...catalog,
-        reviewedAt: catalog.reviewedAt,
-        publishedAt: catalog.publishedAt,
-      };
 
       const catalogVersionId = catalog.id;
       const sources = await transaction
@@ -209,7 +243,7 @@ export class DrizzlePublishedExaminationCatalogRepository
         .limit(1);
 
       if (limitationQuestion === undefined) {
-        throw new Error("Published catalog has no limitation question.");
+        throw new Error("Catalog has no limitation question.");
       }
 
       const limitationOptionRows = await transaction
@@ -225,7 +259,7 @@ export class DrizzlePublishedExaminationCatalogRepository
         .orderBy(asc(limitationOptions.position));
 
       return {
-        catalog: publishedCatalog,
+        catalog,
         sources,
         questions,
         options,
@@ -237,7 +271,5 @@ export class DrizzlePublishedExaminationCatalogRepository
         limitationOptions: limitationOptionRows,
       } satisfies PublishedCatalogRecord;
     });
-
-    return record === null ? null : mapPublishedExaminationCatalog(record);
   }
 }

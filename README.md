@@ -52,6 +52,7 @@ pnpm install
 pnpm check
 pnpm test
 pnpm build
+pnpm dev
 
 pnpm catalog:normalize <entrada-v1.json> <saida-v2.json>
 pnpm catalog:map-rules
@@ -64,9 +65,20 @@ pnpm db:studio
 pnpm infra:down
 
 pnpm api:dev
+pnpm web:dev
 pnpm build
 pnpm api:start
 ```
+
+Com o PostgreSQL ativo, `pnpm dev` sobe API e interface em conjunto:
+
+```text
+http://127.0.0.1:3000   API
+http://127.0.0.1:5173   interface web
+```
+
+Abra `http://127.0.0.1:5173` e use **Abrir prévia do exame**. As marcações
+ficam apenas na memória da página e são apagadas ao recarregá-la.
 
 `infra:down` para o container, mas preserva o volume nomeado do PostgreSQL. Não use
 `docker compose down -v` a menos que queira apagar deliberadamente o banco local.
@@ -81,16 +93,14 @@ A API expõe:
 ```text
 GET /health
 GET /v1/examination-catalogs/current?locale=pt-BR
+GET /v1/examination-catalogs/preview?locale=pt-BR&catalogVersion=0.3.0-draft
 ```
 
 O endpoint do catálogo retorna somente uma versão `published`. Enquanto o banco
-possuir apenas o catálogo `0.2.0-draft`, a resposta esperada é
+possuir apenas catálogos rascunho, a resposta esperada é
 `404 catalog_not_found`.
 
-## Comandos planejados
-
-```bash
-pnpm web:dev
-```
-
-Os comandos da aplicação web serão implementados no respectivo marco.
+O endpoint `/preview` é exclusivo para desenvolvimento: exige
+`ENABLE_DRAFT_PREVIEW=true`, uma versão `-draft` explícita e não é registrado
+quando `NODE_ENV=production`. Ele serve somente conteúdo editorial; respostas
+do exame nunca são enviadas à API.

@@ -7,6 +7,7 @@ import {
 import { describe, expect, it } from "vitest";
 
 import {
+  mapDraftExaminationCatalogPreview,
   mapPublishedExaminationCatalog,
   type PublishedCatalogRecord,
 } from "./examination-catalog.mapper.js";
@@ -217,6 +218,18 @@ describe("published examination catalog mapper", () => {
     expect(catalog.doctrinalSources).toHaveLength(7);
     expect("id" in catalog).toBe(false);
     expect("sourceArtifact" in catalog).toBe(false);
+  });
+
+  it("reconstructs a draft preview without publication metadata", () => {
+    const record = createRecord();
+    record.catalog.reviewedAt = null;
+    record.catalog.publishedAt = null;
+    record.catalog.catalogVersion = "0.3.0-draft";
+    const preview = mapDraftExaminationCatalogPreview(record);
+
+    expect(preview.preview.status).toBe("draft");
+    expect("publishedAt" in preview).toBe(false);
+    expect("sourceArtifact" in preview).toBe(false);
   });
 
   it("rejects an incomplete affirmative option instead of serving bad data", () => {

@@ -1,6 +1,8 @@
 export {
   apiErrorSchema,
   currentExaminationCatalogQuerySchema,
+  draftExaminationCatalogPreviewQuerySchema,
+  draftExaminationCatalogPreviewSchema,
   examinationCatalogSchema,
   healthResponseSchema,
   publishedExaminationCatalogSchema,
@@ -8,6 +10,8 @@ export {
   type AffirmativeOption,
   type CurrentExaminationCatalogQuery,
   type DenialOption,
+  type DraftExaminationCatalogPreview,
+  type DraftExaminationCatalogPreviewQuery,
   type ExaminationCatalog,
   type ExaminationCatalogQuestion,
   type ExaminationOption,

@@ -1,5 +1,7 @@
 import {
+  draftExaminationCatalogPreviewSchema,
   publishedExaminationCatalogSchema,
+  type DraftExaminationCatalogPreview,
   type PublishedExaminationCatalog,
 } from "@confession/contracts";
 
@@ -13,8 +15,8 @@ export interface PublishedCatalogRecord {
     purpose: string;
     globalNotice: string;
     mortalSinResultMessage: string;
-    reviewedAt: Date;
-    publishedAt: Date;
+    reviewedAt: Date | null;
+    publishedAt: Date | null;
   };
   sources: Array<{
     id: number;
@@ -140,9 +142,7 @@ function sorted<Value>(
   return [...values].sort(compare);
 }
 
-export function mapPublishedExaminationCatalog(
-  record: PublishedCatalogRecord,
-): PublishedExaminationCatalog {
+function mapExaminationCatalogContent(record: PublishedCatalogRecord) {
   const sourceCodeById = new Map(
     record.sources.map(({ id, code }) => [id, code]),
   );
@@ -186,8 +186,6 @@ export function mapPublishedExaminationCatalog(
     purpose: record.catalog.purpose,
     globalNotice: record.catalog.globalNotice,
     mortalSinResultMessage: record.catalog.mortalSinResultMessage,
-    reviewedAt: record.catalog.reviewedAt.toISOString(),
-    publishedAt: record.catalog.publishedAt.toISOString(),
     assessment: {
       fullKnowledge: required(
         assessmentByCode.get("full-knowledge"),
@@ -386,5 +384,30 @@ export function mapPublishedExaminationCatalog(
       })),
   };
 
-  return publishedExaminationCatalogSchema.parse(value);
+  return value;
+}
+
+export function mapPublishedExaminationCatalog(
+  record: PublishedCatalogRecord,
+): PublishedExaminationCatalog {
+  return publishedExaminationCatalogSchema.parse({
+    ...mapExaminationCatalogContent(record),
+    reviewedAt: required(record.catalog.reviewedAt, "reviewedAt").toISOString(),
+    publishedAt: required(
+      record.catalog.publishedAt,
+      "publishedAt",
+    ).toISOString(),
+  });
+}
+
+export function mapDraftExaminationCatalogPreview(
+  record: PublishedCatalogRecord,
+): DraftExaminationCatalogPreview {
+  return draftExaminationCatalogPreviewSchema.parse({
+    ...mapExaminationCatalogContent(record),
+    preview: {
+      status: "draft",
+      requiresClericalReview: true,
+    },
+  });
 }

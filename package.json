@@ -7,8 +7,10 @@
     "node": ">=24.0.0 <25"
   },
   "scripts": {
+    "dev": "pnpm --filter @confession/contracts build && pnpm --filter @confession/domain build && pnpm --filter @confession/database build && pnpm --parallel --stream --filter @confession/api --filter @confession/web run dev",
     "api:dev": "pnpm --filter @confession/contracts build && pnpm --filter @confession/database build && pnpm --filter @confession/api dev",
     "api:start": "pnpm --filter @confession/api start",
+    "web:dev": "pnpm --filter @confession/contracts build && pnpm --filter @confession/domain build && pnpm --filter @confession/web dev",
     "catalog:normalize": "node scripts/normalize-editorial-catalog.mjs",
     "catalog:map-rules": "node scripts/map-editorial-rules.mjs",
     "infra:up": "docker compose up -d --wait postgres",

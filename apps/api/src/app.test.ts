@@ -1,14 +1,19 @@
 import { readFileSync } from "node:fs";
 
 import {
+  draftExaminationCatalogPreviewSchema,
   examinationCatalogSchema,
   publishedExaminationCatalogSchema,
+  type DraftExaminationCatalogPreview,
   type PublishedExaminationCatalog,
 } from "@confession/contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { buildApp } from "./app.js";
-import { GetCurrentExaminationCatalogService } from "./modules/examinations/examination-catalog.service.js";
+import {
+  GetCurrentExaminationCatalogService,
+  GetDraftExaminationCatalogPreviewService,
+} from "./modules/examinations/examination-catalog.service.js";
 
 const catalogUrl = new URL(
   "../../../content/editorial/pt-BR/examination-catalog.v3.json",
@@ -28,15 +33,32 @@ const publishedCatalog = publishedExaminationCatalogSchema.parse({
   reviewedAt: "2026-07-29T12:00:00.000Z",
   publishedAt: "2026-07-29T13:00:00.000Z",
 });
+const draftPreview = draftExaminationCatalogPreviewSchema.parse({
+  ...catalogContent,
+  preview: {
+    status: "draft",
+    requiresClericalReview: true,
+  },
+});
 
 const apps: ReturnType<typeof buildApp>[] = [];
 
-function createApp(catalog: PublishedExaminationCatalog | null) {
+function createApp(
+  catalog: PublishedExaminationCatalog | null,
+  preview?: DraftExaminationCatalogPreview | null,
+) {
   const repository = {
     findCurrentPublishedByLocale: vi.fn(async () => catalog),
+    findDraftByVersion: vi.fn(async () => preview ?? null),
   };
   const app = buildApp({
     catalogService: new GetCurrentExaminationCatalogService(repository),
+    ...(preview === undefined
+      ? {}
+      : {
+          draftPreviewService:
+            new GetDraftExaminationCatalogPreviewService(repository),
+        }),
   });
   apps.push(app);
 
@@ -132,5 +154,48 @@ describe("API", () => {
       },
     });
     expect(response.body).not.toContain("database secret");
+  });
+
+  it("does not register the draft preview route unless enabled", async () => {
+    const { app, repository } = createApp(null);
+    const response = await app.inject({
+      method: "GET",
+      url: "/v1/examination-catalogs/preview?locale=pt-BR&catalogVersion=0.3.0-draft",
+    });
+
+    expect(response.statusCode).toBe(404);
+    expect(repository.findDraftByVersion).not.toHaveBeenCalled();
+  });
+
+  it("returns an explicitly requested draft through the preview contract", async () => {
+    const { app, repository } = createApp(null, draftPreview);
+    const response = await app.inject({
+      method: "GET",
+      url: "/v1/examination-catalogs/preview?locale=pt-BR&catalogVersion=0.3.0-draft",
+    });
+
+    expect(response.statusCode).toBe(200);
+    expect(
+      draftExaminationCatalogPreviewSchema.safeParse(response.json()).success,
+    ).toBe(true);
+    expect(response.json().preview).toEqual({
+      status: "draft",
+      requiresClericalReview: true,
+    });
+    expect(repository.findDraftByVersion).toHaveBeenCalledWith({
+      locale: "pt-BR",
+      catalogVersion: "0.3.0-draft",
+    });
+  });
+
+  it("returns 404 when an enabled draft preview is not found", async () => {
+    const { app } = createApp(null, null);
+    const response = await app.inject({
+      method: "GET",
+      url: "/v1/examination-catalogs/preview?locale=pt-BR&catalogVersion=9.9.9-draft",
+    });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.json().error.code).toBe("catalog_not_found");
   });
 });
