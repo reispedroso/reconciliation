@@ -1,7 +1,7 @@
 import {
   apiErrorSchema,
   currentExaminationCatalogQuerySchema,
-  publishedExaminationCatalogSchema,
+  currentExaminationCatalogSchema,
   type ApiError,
 } from "@addiopeccati/contracts";
 import type { FastifyPluginAsync } from "fastify";
@@ -39,7 +39,7 @@ export const examinationCatalogRoutes: FastifyPluginAsync<
     try {
       const catalog = await service.execute(parsedQuery.data);
 
-      return reply.send(publishedExaminationCatalogSchema.parse(catalog));
+      return reply.send(currentExaminationCatalogSchema.parse(catalog));
     } catch (error) {
       if (error instanceof CatalogNotFoundError) {
         return reply
@@ -47,7 +47,7 @@ export const examinationCatalogRoutes: FastifyPluginAsync<
           .send(
             errorResponse(
               "catalog_not_found",
-              "No published examination catalog was found for this locale.",
+              "No current examination catalog was found for this locale.",
             ),
           );
       }
@@ -56,4 +56,3 @@ export const examinationCatalogRoutes: FastifyPluginAsync<
     }
   });
 };
-

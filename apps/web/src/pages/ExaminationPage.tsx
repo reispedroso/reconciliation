@@ -1,16 +1,28 @@
 import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
 
 import { Examination } from "../features/examination/components/Examination.js";
-import { useDraftCatalog } from "../features/examination/hooks/useDraftCatalog.js";
+import { useCurrentCatalog } from "../features/examination/hooks/useCurrentCatalog.js";
 
 export function ExaminationPage() {
-  const state = useDraftCatalog();
+  const state = useCurrentCatalog();
+  const loadingHeadingRef = useRef<HTMLHeadingElement>(null);
+  const retryRequestedRef = useRef(false);
+
+  useEffect(() => {
+    if (state.status !== "loading" || !retryRequestedRef.current) {
+      return;
+    }
+
+    retryRequestedRef.current = false;
+    loadingHeadingRef.current?.focus();
+  }, [state.status]);
 
   return (
     <main id="main-content" className="page-shell examination-page">
       <nav className="page-nav" aria-label="Navegação do exame">
-        <Link className="text-link" to="/">
-          ← Voltar ao início
+        <Link aria-label="Voltar ao início" className="text-link" to="/">
+          Voltar
         </Link>
       </nav>
 
@@ -25,24 +37,40 @@ export function ExaminationPage() {
       </header>
 
       {state.status === "loading" ? (
-        <section className="status-card" aria-live="polite">
+        <section
+          className="status-card status-card--loading"
+          aria-live="polite"
+        >
           <span className="loading-mark" aria-hidden="true" />
-          <h2>Carregando o exame…</h2>
+          <h2 ref={loadingHeadingRef} tabIndex={-1}>
+            Carregando o exame…
+          </h2>
         </section>
       ) : null}
 
       {state.status === "error" ? (
         <section className="status-card status-card--error" role="alert">
-          <h2>Não foi possível carregar o exame</h2>
-          <p>{state.message}</p>
+          <h2>{state.kind === "unavailable" ? "Exame temporariamente indisponível" : "Não foi possível carregar o exame"}</h2>
           <p>
-            Confirme que a API e o PostgreSQL estão ativos e tente novamente.
+            {state.kind === "unavailable" ? "O conteúdo do exame ainda não está disponível. Tente novamente mais tarde." : state.kind === "network" ? "Não foi possível conectar ao conteúdo do exame. Verifique sua conexão e tente novamente." : state.kind === "invalid-response" ? "Recebemos uma resposta inválida ao carregar o exame. Tente novamente em instantes." : "Ocorreu um problema ao carregar o exame. Tente novamente em instantes."}
           </p>
+          <div className="status-actions">
+            <button
+              className="primary-button"
+              onClick={() => {
+                retryRequestedRef.current = true;
+                state.retry();
+              }}
+              type="button"
+            >
+              Tentar novamente
+            </button>
+          </div>
         </section>
       ) : null}
 
       {state.status === "loaded" && state.catalog.questions.length === 0 ? (
-        <section className="status-card">
+        <section className="status-card status-card--empty">
           <h2>O catálogo está vazio</h2>
         </section>
       ) : null}

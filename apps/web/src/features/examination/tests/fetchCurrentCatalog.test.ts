@@ -1,0 +1,7 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { currentExaminationCatalogSchema } from "@addiopeccati/contracts";
+import { describe, expect, it, vi } from "vitest";
+import { CatalogFetchError, fetchCurrentCatalog } from "../api/fetchCurrentCatalog.js";
+const catalog = currentExaminationCatalogSchema.parse(JSON.parse(readFileSync(resolve(process.cwd(), "../../content/editorial/pt-BR/examination-catalog.json"), "utf8")));
+describe("fetchCurrentCatalog", () => { it("requests only the current route", async () => { vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify(catalog), { status: 200 }))); await expect(fetchCurrentCatalog()).resolves.toEqual(catalog); expect(fetch).toHaveBeenCalledWith(expect.stringContaining("/current?locale=pt-BR"), expect.any(Object)); }); it("does not fall back after a network error", async () => { vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline"))); await expect(fetchCurrentCatalog()).rejects.toMatchObject({ kind: "network" } satisfies Partial<CatalogFetchError>); }); it("classifies a missing catalog", async () => { vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: { code: "catalog_not_found", message: "x" } }), { status: 404 }))); await expect(fetchCurrentCatalog()).rejects.toMatchObject({ kind: "unavailable" } satisfies Partial<CatalogFetchError>); }); });

@@ -8,6 +8,13 @@
       "when": 1785584625277,
       "tag": "0000_chilly_scourge",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1785700000000,
+      "tag": "0001_current_editorial_catalog",
+      "breakpoints": true
     }
   ]
 }

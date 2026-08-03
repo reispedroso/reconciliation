@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { ExaminationPage } from "../pages/ExaminationPage.js";
 import { HomePage } from "../pages/HomePage.js";
@@ -13,7 +13,6 @@ export function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/exame" element={<ExaminationPage />} />
-        <Route path="/preview" element={<Navigate replace to="/exame" />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

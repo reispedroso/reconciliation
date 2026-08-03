@@ -13,6 +13,7 @@
     "web:dev": "pnpm --filter @addiopeccati/contracts build && pnpm --filter @addiopeccati/domain build && pnpm --filter @addiopeccati/web dev",
     "catalog:normalize": "node scripts/normalize-editorial-catalog.mjs",
     "catalog:map-rules": "node scripts/map-editorial-rules.mjs",
+    "catalog:sync": "pnpm db:seed",
     "infra:up": "docker compose up -d --wait postgres",
     "infra:down": "docker compose down",
     "db:generate": "pnpm --filter @addiopeccati/database db:generate",

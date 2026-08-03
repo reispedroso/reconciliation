@@ -1,0 +1,1030 @@
+{
+  "schemaVersion": "1.0.0",
+  "locale": "pt-BR",
+  "title": "Catálogo de checkboxes — condutas de matéria grave a verificar",
+  "purpose": "Ajudar o fiel a recordar e identificar condutas objetivamente graves e, somente depois, verificar plena consciência e consentimento deliberado.",
+  "globalNotice": "Marcar uma opção não significa automaticamente que houve pecado mortal. O pecado mortal exige simultaneamente matéria grave, plena consciência e consentimento deliberado. O aplicativo avalia atos e respostas; não julga a salvação da pessoa.",
+  "doctrinalSources": [
+    {
+      "code": "catecismo-da-igreja-catolica-1857-1861",
+      "document": "Catecismo da Igreja Católica",
+      "locator": "1857-1861",
+      "authorityLevel": "Catecismo da Igreja Católica",
+      "officialUrl": "https://www.vatican.va/archive/cathechism_po/index_new/p3s1cap1_1699-1876_po.html"
+    },
+    {
+      "code": "catecismo-da-igreja-catolica-1456-1458",
+      "document": "Catecismo da Igreja Católica",
+      "locator": "1456-1458",
+      "authorityLevel": "Catecismo da Igreja Católica",
+      "officialUrl": "https://www.vatican.va/archive/cathechism_po/index_new/p2s2cap1_1420-1532_po.html"
+    },
+    {
+      "code": "catecismo-da-igreja-catolica-2084-2195",
+      "document": "Catecismo da Igreja Católica",
+      "locator": "2084-2195",
+      "authorityLevel": "Catecismo da Igreja Católica",
+      "officialUrl": "https://www.vatican.va/archive/cathechism_po/index_new/p3s2cap1_2083-2195_po.html"
+    },
+    {
+      "code": "catecismo-da-igreja-catolica-2196-2557",
+      "document": "Catecismo da Igreja Católica",
+      "locator": "2196-2557",
+      "authorityLevel": "Catecismo da Igreja Católica",
+      "officialUrl": "https://www.vatican.va/archive/cathechism_po/index_new/p3s2cap2_2196-2557_po.html"
+    },
+    {
+      "code": "codigo-de-direito-canonico-can-988-1-2",
+      "document": "Código de Direito Canônico",
+      "locator": "cân. 988 §1-2",
+      "authorityLevel": "Lei universal da Igreja",
+      "officialUrl": "https://press.vatican.va/archive/cdc/index_po.htm"
+    },
+    {
+      "code": "humanae-vitae-14",
+      "document": "Humanae vitae",
+      "locator": "14",
+      "authorityLevel": "Encíclica pontifícia",
+      "officialUrl": "https://www.vatican.va/content/paul-vi/pt/encyclicals/documents/hf_p-vi_enc_25071968_humanae-vitae.html"
+    },
+    {
+      "code": "donum-vitae-ii-1-5",
+      "document": "Donum vitae",
+      "locator": "II, 1-5",
+      "authorityLevel": "Instrução doutrinal da Congregação para a Doutrina da Fé",
+      "officialUrl": "https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_19870222_respect-for-human-life_po.html"
+    }
+  ],
+  "questions": [
+    {
+      "code": "sacramental-integrity",
+      "position": 0,
+      "title": "CONFISSÃO E EUCARISTIA",
+      "prompt": "Desde a sua última confissão bem-feita, aconteceu alguma destas situações?",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
+      "control": "checkbox_group",
+      "selectionMode": "multiple",
+      "options": [
+        {
+          "code": "concealed-mortal-sin",
+          "position": 0,
+          "label": "Escondi conscientemente, por vergonha ou decisão própria, um pecado mortal durante a confissão.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Ocultei deliberadamente um pecado mortal em confissão.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-1456-1458",
+            "codigo-de-direito-canonico-can-988-1-2",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "communion-in-mortal-sin",
+          "position": 1,
+          "label": "Recebi a Sagrada Comunhão sabendo que estava em pecado mortal e sem ter recebido absolvição sacramental.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Recebi a Sagrada Comunhão consciente de estar em pecado mortal.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-1456-1458",
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-sacrilege",
+          "position": 2,
+          "label": "Profanei ou tratei de modo gravemente indigno a Eucaristia, outro sacramento, uma ação litúrgica ou algo consagrado a Deus.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Cometi sacrilégio grave.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "none-of-the-above",
+          "position": 3,
+          "label": "Não pratiquei nenhuma das condutas acima.",
+          "responseKind": "denial",
+          "exclusive": true
+        }
+      ]
+    },
+    {
+      "code": "first-commandment",
+      "position": 1,
+      "title": "PRIMEIRO MANDAMENTO — AMAR A DEUS SOBRE TODAS AS COISAS",
+      "prompt": "Pratiquei alguma destas condutas gravemente contrárias à fé, à esperança, à caridade ou ao culto devido a Deus?",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
+      "control": "checkbox_group",
+      "selectionMode": "multiple",
+      "options": [
+        {
+          "code": "apostasy",
+          "position": 0,
+          "label": "Rejeitei totalmente a fé cristã depois de tê-la recebido no Batismo.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Abandonei deliberadamente a fé cristã.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "formal-heresy",
+          "position": 1,
+          "label": "Neguei ou mantive dúvida obstinada sobre uma verdade que eu sabia dever ser crida com fé divina e católica.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Neguei obstinadamente uma verdade da fé católica.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "formal-schism",
+          "position": 2,
+          "label": "Rompi deliberadamente a comunhão com a Igreja, recusando a sujeição ao Papa ou a comunhão com os membros da Igreja a ele sujeitos.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Rompi deliberadamente a comunhão com a Igreja.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "idolatry",
+          "position": 3,
+          "label": "Prestei culto divino a um falso deus, espírito, demônio, pessoa, objeto, poder ou realidade criada.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Pratiquei idolatria.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "satanic-invocation",
+          "position": 4,
+          "label": "Invoquei Satanás ou demônios, ou participei conscientemente de culto satânico.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Invoquei demônios ou participei de culto satânico.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "magic-witchcraft",
+          "position": 5,
+          "label": "Pratiquei magia ou feitiçaria buscando dominar poderes ocultos ou obter poder sobrenatural.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Pratiquei magia ou feitiçaria.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "serious-divination-spiritism",
+          "position": 6,
+          "label": "Recorri seriamente à adivinhação, mediunidade, evocação dos mortos ou espiritismo buscando conhecimento ou poder oculto.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Recorri deliberadamente a práticas graves de adivinhação ou espiritismo.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "despair",
+          "position": 7,
+          "label": "Rejeitei deliberadamente toda esperança de salvação ou de perdão de Deus.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Desesperei deliberadamente da salvação ou do perdão de Deus.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "presumption",
+          "position": 8,
+          "label": "Escolhi cometer pecado grave contando que Deus me perdoaria mesmo sem arrependimento e conversão.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Pequei por presunção, contando com o perdão sem conversão.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "hatred-of-god",
+          "position": 9,
+          "label": "Alimentei deliberadamente ódio contra Deus, rejeitando ou amaldiçoando a sua bondade.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Alimentei deliberadamente ódio contra Deus.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "simony",
+          "position": 10,
+          "label": "Comprei, vendi ou tentei negociar um sacramento, graça espiritual ou função sagrada como se fosse mercadoria.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Cometi simonia.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "none-of-the-above",
+          "position": 11,
+          "label": "Não pratiquei nenhuma das condutas acima.",
+          "responseKind": "denial",
+          "exclusive": true
+        }
+      ]
+    },
+    {
+      "code": "second-commandment",
+      "position": 2,
+      "title": "SEGUNDO MANDAMENTO — NÃO TOMAR O SANTO NOME DE DEUS EM VÃO",
+      "prompt": "Pratiquei alguma destas ofensas graves ao nome de Deus?",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
+      "control": "checkbox_group",
+      "selectionMode": "multiple",
+      "options": [
+        {
+          "code": "blasphemy",
+          "position": 0,
+          "label": "Proferi palavras de ódio, injúria, desprezo ou desafio contra Deus, a Igreja, os santos ou as coisas sagradas.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Cometi blasfêmia.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "perjury",
+          "position": 1,
+          "label": "Invoquei Deus como testemunha de algo que eu sabia ser falso, ou fiz sob juramento uma promessa que não pretendia cumprir.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Cometi perjúrio.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "oath-for-grave-evil",
+          "position": 2,
+          "label": "Usei o nome de Deus em juramento para prometer, justificar ou apoiar uma ação gravemente má.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Usei o nome de Deus para prometer ou justificar uma ação gravemente má.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "none-of-the-above",
+          "position": 3,
+          "label": "Não pratiquei nenhuma das condutas acima.",
+          "responseKind": "denial",
+          "exclusive": true
+        }
+      ]
+    },
+    {
+      "code": "third-commandment",
+      "position": 3,
+      "title": "TERCEIRO MANDAMENTO — SANTIFICAR OS DOMINGOS E FESTAS DE GUARDA",
+      "prompt": "Deixei deliberadamente de cumprir o preceito da Missa?",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
+      "control": "checkbox_group",
+      "selectionMode": "multiple",
+      "options": [
+        {
+          "code": "missed-obligatory-mass",
+          "position": 0,
+          "label": "Faltei deliberadamente à Missa em domingo ou dia santo de preceito, sem motivo sério e sem dispensa.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Faltei deliberadamente à Missa de preceito sem motivo sério.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "caused-dependent-to-miss-mass",
+          "position": 1,
+          "label": "Impedí deliberadamente, sem motivo sério, que alguém sob a minha responsabilidade participasse da Missa de preceito.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Impedí alguém sob minha responsabilidade de participar da Missa de preceito.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2084-2195",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "none-of-the-above",
+          "position": 2,
+          "label": "Não pratiquei nenhuma das condutas acima.",
+          "responseKind": "denial",
+          "exclusive": true
+        }
+      ]
+    },
+    {
+      "code": "fourth-commandment",
+      "position": 4,
+      "title": "QUARTO MANDAMENTO — HONRAR PAI E MÃE E CUMPRIR DEVERES FAMILIARES GRAVES",
+      "prompt": "Descumpri gravemente algum dever de justiça e caridade para com pais, filhos, cônjuge ou dependentes?",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
+      "control": "checkbox_group",
+      "selectionMode": "multiple",
+      "options": [
+        {
+          "code": "abandoned-parents-grave-need",
+          "position": 0,
+          "label": "Abandonei ou recusei ajuda essencial aos meus pais em necessidade grave, embora pudesse ajudá-los.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Abandonei meus pais em necessidade grave, embora pudesse ajudá-los.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-neglect-children",
+          "position": 1,
+          "label": "Negligenciei gravemente alimentação, moradia, saúde, segurança, educação ou proteção de filho ou dependente.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Negligenciei gravemente os cuidados devidos a filho ou dependente.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-neglect-faith-formation",
+          "position": 2,
+          "label": "Negligenciei de modo grave e persistente a formação cristã dos meus filhos, ou os impedi deliberadamente de receber formação ou sacramentos necessários.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Negligenciei gravemente a formação cristã dos meus filhos.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-family-abuse",
+          "position": 3,
+          "label": "Maltratei gravemente, ameacei, aterrorizei ou abusei de pai, mãe, cônjuge, filho ou pessoa dependente.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Maltratei gravemente um familiar ou dependente.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "unjust-family-abandonment",
+          "position": 4,
+          "label": "Abandonei injustamente cônjuge, filhos ou dependentes, deixando de cumprir obrigações essenciais e causando dano grave.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Abandonei injustamente minha família ou dependentes, causando dano grave.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-disobedience-legitimate-authority",
+          "position": 5,
+          "label": "Desobedeci a pai, mãe ou autoridade legítima em assunto objetivamente grave, enquanto eu estava realmente sujeito a essa autoridade.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Desobedeci gravemente a uma autoridade legítima em matéria grave.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "none-of-the-above",
+          "position": 6,
+          "label": "Não pratiquei nenhuma das condutas acima.",
+          "responseKind": "denial",
+          "exclusive": true
+        }
+      ]
+    },
+    {
+      "code": "fifth-commandment",
+      "position": 5,
+      "title": "QUINTO MANDAMENTO — NÃO MATAR NEM CAUSAR DANO GRAVE",
+      "prompt": "Pratiquei alguma destas condutas gravemente contrárias à vida, à integridade ou à caridade?",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
+      "control": "checkbox_group",
+      "selectionMode": "multiple",
+      "options": [
+        {
+          "code": "intentional-homicide",
+          "position": 0,
+          "label": "Matei deliberadamente uma pessoa inocente, ou tentei matá-la.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Cometi ou tentei cometer homicídio voluntário.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "formal-abortion-cooperation",
+          "position": 1,
+          "label": "Pratiquei, procurei, pressionei, aconselhei, financiei ou cooperei formalmente para um aborto provocado.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Pratiquei ou cooperei formalmente para um aborto.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "euthanasia",
+          "position": 2,
+          "label": "Pratiquei, ordenei ou cooperei diretamente para provocar a morte de pessoa doente, idosa ou moribunda com a intenção de pôr fim ao sofrimento.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Pratiquei ou cooperei diretamente para eutanásia.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "suicide-attempt",
+          "position": 3,
+          "label": "Tentei deliberadamente tirar a própria vida.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Tentei tirar a própria vida.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-violence",
+          "position": 4,
+          "label": "Agredi, torturei ou feri alguém de modo grave, sem legítima defesa proporcional.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Causei violência ou lesão grave a outra pessoa.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-recklessness",
+          "position": 5,
+          "label": "Conduzi veículo ou pratiquei outra ação com imprudência grave, colocando conscientemente vidas em sério risco.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Coloquei vidas em sério risco por imprudência grave.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "illicit-drug-use",
+          "position": 6,
+          "label": "Usei drogas ilícitas sem finalidade estritamente terapêutica.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Usei drogas ilícitas.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "drug-trafficking",
+          "position": 7,
+          "label": "Produzi, vendi, distribuí ou facilitei conscientemente o tráfico de drogas.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Produzi, vendi ou distribuí drogas ilícitas.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-drunkenness",
+          "position": 8,
+          "label": "Embriaguei-me deliberadamente até perder gravemente o uso da razão ou colocar a segurança e deveres graves em risco.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Embriaguei-me deliberadamente de modo grave.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-scandal",
+          "position": 9,
+          "label": "Levei, pressionei, ensinei ou incentivei deliberadamente outra pessoa a cometer um pecado grave.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Levei deliberadamente outra pessoa a cometer pecado grave.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-hatred",
+          "position": 10,
+          "label": "Desejei deliberadamente que outra pessoa morresse, fosse gravemente ferida ou sofresse outro mal grave.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Desejei deliberadamente um mal grave a outra pessoa.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "refused-emergency-aid",
+          "position": 11,
+          "label": "Recusei ajuda essencial a alguém em perigo grave e imediato, embora pudesse ajudar de modo razoável e seguro.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Recusei ajuda possível a alguém em perigo grave.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "none-of-the-above",
+          "position": 12,
+          "label": "Não pratiquei nenhuma das condutas acima.",
+          "responseKind": "denial",
+          "exclusive": true
+        }
+      ]
+    },
+    {
+      "code": "sixth-and-ninth-commandments",
+      "position": 6,
+      "title": "SEXTO E NONO MANDAMENTOS — CASTIDADE NOS ATOS, PENSAMENTOS E DESEJOS",
+      "prompt": "Pratiquei ou consenti deliberadamente em alguma destas condutas gravemente contrárias à castidade?",
+      "helpText": "Não marque tentações, imagens involuntárias, reações corporais não escolhidas ou pensamentos imediatamente rejeitados. Se uma dúvida vier do escrúpulo, siga a orientação do seu confessor.",
+      "control": "checkbox_group",
+      "selectionMode": "multiple",
+      "options": [
+        {
+          "code": "fornication",
+          "position": 0,
+          "label": "Tive relação sexual fora de um matrimônio válido.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Tive relações sexuais fora do matrimônio.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "adultery",
+          "position": 1,
+          "label": "Tive relação sexual com pessoa casada, ou com outra pessoa enquanto eu estava unido por matrimônio válido.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Cometi adultério.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "same-sex-acts",
+          "position": 2,
+          "label": "Pratiquei atos sexuais com pessoa do mesmo sexo.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Pratiquei atos sexuais com pessoa do mesmo sexo.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "masturbation",
+          "position": 3,
+          "label": "Estimulei voluntariamente os órgãos sexuais para obter prazer sexual.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Pratiquei masturbação.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "pornography",
+          "position": 4,
+          "label": "Busquei ou consumi deliberadamente pornografia, ou produzi, divulguei ou vendi material pornográfico.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Busquei ou divulguei pornografia.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "paid-for-sex",
+          "position": 5,
+          "label": "Paguei por ato sexual.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Paguei por ato sexual.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "exploited-prostitution",
+          "position": 6,
+          "label": "Explorei a prostituição de outra pessoa.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Explorei a prostituição de outra pessoa.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "engaged-in-prostitution",
+          "position": 7,
+          "label": "Entreguei-me à prostituição.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Entreguei-me à prostituição.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "rape-sexual-coercion",
+          "position": 8,
+          "label": "Forcei, ameacei, coagi ou abusei de alguém para obter ato ou contato sexual.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Cometi violência ou coerção sexual.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "sexual-abuse-special-gravity",
+          "position": 9,
+          "label": "Pratiquei ato sexual com menor, parente próximo, pessoa incapaz de consentir ou animal.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Cometi ato sexual de especial gravidade.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "sexual-touching-outside-marriage",
+          "position": 10,
+          "label": "Pratiquei deliberadamente toques, carícias ou outros atos com outra pessoa, fora do matrimônio, buscando excitação ou prazer sexual.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Pratiquei atos deliberados de prazer sexual fora do matrimônio.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "deliberate-lustful-thoughts",
+          "position": 11,
+          "label": "Consenti deliberadamente em fantasias, desejos ou olhares de conteúdo sexual gravemente ilícito, em vez de rejeitá-los.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Consenti deliberadamente em desejos sexuais gravemente ilícitos.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "contraception",
+          "position": 12,
+          "label": "Tornei deliberadamente o ato conjugal infecundo por contracepção, ou pressionei diretamente meu cônjuge a fazê-lo.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Usei contracepção no ato conjugal.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "humanae-vitae-14",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "direct-sterilization",
+          "position": 13,
+          "label": "Procurei ou realizei esterilização direta com a finalidade de impedir a procriação.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Procurei esterilização direta para impedir a procriação.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "artificial-procreation",
+          "position": 14,
+          "label": "Recorri ou cooperei diretamente com fecundação in vitro ou outra técnica que substitui o ato conjugal na geração de um filho.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Recorri a técnica de procriação que substitui o ato conjugal.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "donum-vitae-ii-1-5",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "none-of-the-above",
+          "position": 15,
+          "label": "Não pratiquei nenhuma das condutas acima.",
+          "responseKind": "denial",
+          "exclusive": true
+        }
+      ]
+    },
+    {
+      "code": "seventh-and-tenth-commandments",
+      "position": 7,
+      "title": "SÉTIMO E DÉCIMO MANDAMENTOS — JUSTIÇA NOS BENS E DIREITOS DO PRÓXIMO",
+      "prompt": "Pratiquei alguma injustiça grave contra os bens, o trabalho ou os direitos de outra pessoa?",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
+      "control": "checkbox_group",
+      "selectionMode": "multiple",
+      "options": [
+        {
+          "code": "grave-theft",
+          "position": 0,
+          "label": "Roubei, desviei, retive ou me apropriei de bem de valor relevante, ou causei prejuízo grave.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Roubei ou retive injustamente bens de valor relevante.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-fraud-corruption",
+          "position": 1,
+          "label": "Cometi fraude, corrupção, suborno, desvio de recursos, falsificação financeira ou evasão fiscal em escala grave.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Cometi fraude, corrupção ou desvio grave de recursos.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "unjust-wages-exploitation",
+          "position": 2,
+          "label": "Retive salário devido, paguei salário gravemente injusto ou explorei seriamente trabalhadores.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Cometi grave injustiça no pagamento ou tratamento de trabalhadores.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-property-damage",
+          "position": 3,
+          "label": "Danifiquei deliberadamente propriedade alheia ou pública causando prejuízo grave.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Causei deliberadamente dano grave à propriedade alheia.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-debt-retention",
+          "position": 4,
+          "label": "Recusei deliberadamente pagar dívida importante ou devolver bem alheio, embora pudesse fazê-lo, causando injustiça grave.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Retive injustamente dívida ou bem importante.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "gambling-family-necessities",
+          "position": 5,
+          "label": "Apostei ou joguei a ponto de comprometer seriamente o sustento, as dívidas ou as necessidades da minha família ou de dependentes.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Comprometi necessidades essenciais por meio de jogo ou apostas.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "human-trafficking-slavery",
+          "position": 6,
+          "label": "Participei de tráfico de pessoas, escravidão, trabalho forçado ou exploração grave de seres humanos.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Participei de tráfico ou exploração grave de pessoas.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "received-stolen-goods",
+          "position": 7,
+          "label": "Comprei, recebi, ocultei ou lucrei conscientemente com bens roubados de valor relevante.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Lucrei conscientemente com bens roubados de valor relevante.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "none-of-the-above",
+          "position": 8,
+          "label": "Não pratiquei nenhuma das condutas acima.",
+          "responseKind": "denial",
+          "exclusive": true
+        }
+      ]
+    },
+    {
+      "code": "eighth-commandment",
+      "position": 8,
+      "title": "OITAVO MANDAMENTO — NÃO LEVANTAR FALSO TESTEMUNHO NEM CAUSAR GRAVE DANO PELA MENTIRA",
+      "prompt": "Faltei gravemente à verdade, à justiça ou à reputação do próximo?",
+      "helpText": "Marque somente se essa conduta realmente aconteceu. A seleção será incluída na sua lista privada para a confissão.",
+      "control": "checkbox_group",
+      "selectionMode": "multiple",
+      "options": [
+        {
+          "code": "grave-false-testimony",
+          "position": 0,
+          "label": "Dei falso testemunho, menti sob juramento ou manipulei prova, comprometendo gravemente a justiça.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Dei falso testemunho ou cometi perjúrio com grave dano à justiça.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-lie",
+          "position": 1,
+          "label": "Menti ou enganei deliberadamente causando, ou pretendendo causar, grave dano a alguém.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Menti causando grave dano.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-calumny",
+          "position": 2,
+          "label": "Atribuí falsamente a alguém crime, pecado ou falta grave, causando sério dano à sua reputação ou aos seus direitos.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Caluniei alguém causando grave dano.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-detraction",
+          "position": 3,
+          "label": "Revelei sem motivo proporcional faltas graves e verdadeiras de alguém a quem não as conhecia, causando sério dano.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Revelei sem justa causa faltas graves de alguém, causando sério dano.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-secret-disclosure",
+          "position": 4,
+          "label": "Revelei segredo profissional, confidência ou informação privada importante sem justa causa, causando grave dano.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Revelei segredo importante sem justa causa, causando grave dano.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-document-falsification",
+          "position": 5,
+          "label": "Falsifiquei ou usei documento, registro ou prova falsa para obter vantagem grave ou causar séria injustiça.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Falsifiquei ou usei documento falso causando grave injustiça.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "grave-omission-of-truth",
+          "position": 6,
+          "label": "Calei ou encobri deliberadamente uma verdade quando tinha obrigação grave de revelá-la, causando ou permitindo grave injustiça.",
+          "responseKind": "affirmation",
+          "exclusive": false,
+          "summaryText": "Omiti uma verdade que tinha grave dever de revelar, permitindo grave injustiça.",
+          "doctrinalSourceCodes": [
+            "catecismo-da-igreja-catolica-2196-2557",
+            "catecismo-da-igreja-catolica-1857-1861"
+          ]
+        },
+        {
+          "code": "none-of-the-above",
+          "position": 7,
+          "label": "Não pratiquei nenhuma das condutas acima.",
+          "responseKind": "denial",
+          "exclusive": true
+        }
+      ]
+    }
+  ]
+}

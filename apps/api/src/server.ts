@@ -1,11 +1,9 @@
 import { createDatabase } from "@addiopeccati/database";
 
 import { buildApp } from "./app.js";
-import { isDraftPreviewEnabled } from "./config/draft-preview.js";
-import { DrizzlePublishedExaminationCatalogRepository } from "./modules/examinations/examination-catalog.repository.js";
+import { DrizzleCurrentExaminationCatalogRepository } from "./modules/examinations/examination-catalog.repository.js";
 import {
   GetCurrentExaminationCatalogService,
-  GetDraftExaminationCatalogPreviewService,
 } from "./modules/examinations/examination-catalog.service.js";
 
 const databaseUrl = process.env["DATABASE_URL"];
@@ -23,15 +21,10 @@ if (!Number.isInteger(portValue) || portValue < 1 || portValue > 65_535) {
 }
 
 const { client, database } = createDatabase(databaseUrl);
-const repository = new DrizzlePublishedExaminationCatalogRepository(database);
+const repository = new DrizzleCurrentExaminationCatalogRepository(database);
 const service = new GetCurrentExaminationCatalogService(repository);
-const draftPreviewEnabled = isDraftPreviewEnabled(process.env);
-const draftPreviewService = draftPreviewEnabled
-  ? new GetDraftExaminationCatalogPreviewService(repository)
-  : undefined;
 const app = buildApp({
   catalogService: service,
-  ...(draftPreviewService === undefined ? {} : { draftPreviewService }),
   logger: true,
   webOrigin: process.env["WEB_ORIGIN"] ?? "http://127.0.0.1:5173",
 });

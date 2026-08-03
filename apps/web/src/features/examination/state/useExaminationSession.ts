@@ -1,4 +1,4 @@
-import type { DraftExaminationCatalogPreview } from "@addiopeccati/contracts";
+import type { CurrentExaminationCatalog } from "@addiopeccati/contracts";
 import {
   useCallback,
   useEffect,
@@ -18,12 +18,11 @@ export interface ExaminationSessionState {
 }
 
 interface StoredExaminationSession extends ExaminationSessionState {
-  catalogVersion: string;
   schemaVersion: 1;
 }
 
 function initialState(
-  catalog: DraftExaminationCatalogPreview,
+  catalog: CurrentExaminationCatalog,
 ): ExaminationSessionState {
   const firstQuestion = catalog.questions[0];
 
@@ -43,7 +42,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function readSession(
-  catalog: DraftExaminationCatalogPreview,
+  catalog: CurrentExaminationCatalog,
 ): ExaminationSessionState {
   const fallback = initialState(catalog);
 
@@ -58,8 +57,7 @@ function readSession(
 
     if (
       !isRecord(parsed) ||
-      parsed["schemaVersion"] !== 1 ||
-      parsed["catalogVersion"] !== catalog.catalogVersion
+      parsed["schemaVersion"] !== 1
     ) {
       return fallback;
     }
@@ -118,13 +116,9 @@ function readSession(
   }
 }
 
-function persistSession(
-  catalogVersion: string,
-  state: ExaminationSessionState,
-): void {
+function persistSession(state: ExaminationSessionState): void {
   const storedSession: StoredExaminationSession = {
     schemaVersion: 1,
-    catalogVersion,
     ...state,
   };
 
@@ -139,13 +133,13 @@ function persistSession(
 }
 
 export interface UseExaminationSessionResult {
-  clearSession: () => void;
+  clearSession: () => { status: "cleared" | "failed" };
   setState: Dispatch<SetStateAction<ExaminationSessionState>>;
   state: ExaminationSessionState;
 }
 
 export function useExaminationSession(
-  catalog: DraftExaminationCatalogPreview,
+  catalog: CurrentExaminationCatalog,
 ): UseExaminationSessionResult {
   const [state, setState] = useState<ExaminationSessionState>(() =>
     readSession(catalog),
@@ -158,25 +152,30 @@ export function useExaminationSession(
       return;
     }
 
-    persistSession(catalog.catalogVersion, state);
-  }, [catalog.catalogVersion, state]);
+    persistSession(state);
+  }, [state]);
 
   const clearSession = useCallback(() => {
     skipNextPersistence.current = true;
-
     try {
+      const keys: string[] = [];
       for (let index = window.sessionStorage.length - 1; index >= 0; index -= 1) {
         const key = window.sessionStorage.key(index);
-
-        if (key?.startsWith(applicationSessionKeyPrefix) === true) {
-          window.sessionStorage.removeItem(key);
+        if (key?.startsWith(applicationSessionKeyPrefix) === true) keys.push(key);
+      }
+      keys.forEach((key) => window.sessionStorage.removeItem(key));
+      for (let index = 0; index < window.sessionStorage.length; index += 1) {
+        if (window.sessionStorage.key(index)?.startsWith(applicationSessionKeyPrefix) === true) {
+          setState(initialState(catalog));
+          return { status: "failed" as const };
         }
       }
+      setState(initialState(catalog));
+      return { status: "cleared" as const };
     } catch {
-      // No personal data is logged when browser storage is unavailable.
+      setState(initialState(catalog));
+      return { status: "failed" as const };
     }
-
-    setState(initialState(catalog));
   }, [catalog]);
 
   return { clearSession, setState, state };

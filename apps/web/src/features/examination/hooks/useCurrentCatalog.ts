@@ -1,0 +1,5 @@
+import type { CurrentExaminationCatalog } from "@addiopeccati/contracts";
+import { useCallback, useEffect, useState } from "react";
+import { CatalogFetchError, fetchCurrentCatalog } from "../api/fetchCurrentCatalog.js";
+type CurrentCatalogState = { status: "loading" } | { status: "loaded"; catalog: CurrentExaminationCatalog } | { status: "error"; kind: CatalogFetchError["kind"]; retry: () => void };
+export function useCurrentCatalog(): CurrentCatalogState { const [requestIndex, setRequestIndex] = useState(0); const [state, setState] = useState<CurrentCatalogState>({ status: "loading" }); const retry = useCallback(() => { setState({ status: "loading" }); setRequestIndex((value) => value + 1); }, []); useEffect(() => { const controller = new AbortController(); void fetchCurrentCatalog(controller.signal).then((catalog) => setState({ status: "loaded", catalog })).catch((error: unknown) => { if (!controller.signal.aborted) setState({ status: "error", kind: error instanceof CatalogFetchError ? error.kind : "internal", retry }); }); return () => controller.abort(); }, [requestIndex, retry]); return state; }

@@ -6,6 +6,7 @@ docs/internal/
 *.private.md
 bootstrap-addiopeccati.sh
 docs/
+.specs/
 
 # Dependências e artefatos gerados
 node_modules/
@@ -17,3 +18,6 @@ coverage/
 .env
 .env.*
 !.env.example
+
+.agents/
+.codex/

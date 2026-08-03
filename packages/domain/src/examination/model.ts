@@ -7,9 +7,7 @@ export interface ExaminationOptionDefinition {
   readonly label: string;
   readonly responseKind: ResponseKind;
   readonly exclusive: boolean;
-  readonly summary?: {
-    readonly text: string;
-  };
+  readonly summaryText?: string;
 }
 
 export interface ExaminationQuestionDefinition {

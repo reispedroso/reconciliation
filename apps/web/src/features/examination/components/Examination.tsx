@@ -1,5 +1,5 @@
 import type {
-  DraftExaminationCatalogPreview,
+  CurrentExaminationCatalog,
   ExaminationCatalogQuestion,
 } from "@addiopeccati/contracts";
 import {
@@ -8,7 +8,7 @@ import {
   selectOption,
   type ExaminationQuestionDefinition,
 } from "@addiopeccati/domain";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useExaminationSession } from "../state/useExaminationSession.js";
 import { MortalSinCriteriaDisclosure } from "./MortalSinCriteriaDisclosure.js";
@@ -26,7 +26,7 @@ function toSelectionDefinition(
       responseKind: option.responseKind,
       exclusive: option.exclusive,
       ...(option.responseKind === "affirmation"
-        ? { summary: { text: option.summary.text } }
+        ? { summaryText: option.summaryText }
         : {}),
     })),
   };
@@ -50,7 +50,7 @@ function splitQuestionTitle(title: string, questionIndex: number) {
 }
 
 export interface ExaminationProps {
-  catalog: DraftExaminationCatalogPreview;
+  catalog: CurrentExaminationCatalog;
 }
 
 export function Examination({ catalog }: ExaminationProps) {
@@ -65,8 +65,9 @@ export function Examination({ catalog }: ExaminationProps) {
     setCompletionClearConfirmationVisible,
   ] = useState(false);
   const [clearSuccessVisible, setClearSuccessVisible] = useState(false);
+  const [clearFailureVisible, setClearFailureVisible] = useState(false);
   const [completionVisible, setCompletionVisible] = useState(false);
-  const focusContentAfterNavigation = useRef(false);
+  const [contentFocusRequest, setContentFocusRequest] = useState(0);
   const selectionDefinitions = useMemo(
     () =>
       new Map(
@@ -113,7 +114,7 @@ export function Examination({ catalog }: ExaminationProps) {
                 {
                   optionCode: option.code,
                   selected: selectedOptionCodes.has(option.code),
-                  text: option.summary.text,
+                  text: option.summaryText,
                 },
               ]
             : [],
@@ -148,11 +149,10 @@ export function Examination({ catalog }: ExaminationProps) {
   const activeDefinition = definition;
 
   useEffect(() => {
-    if (!focusContentAfterNavigation.current) {
+    if (contentFocusRequest === 0) {
       return;
     }
 
-    focusContentAfterNavigation.current = false;
     const targetId = completionVisible
       ? "examination-completion-heading"
       : `${activeQuestion.code}-heading`;
@@ -163,7 +163,7 @@ export function Examination({ catalog }: ExaminationProps) {
     if (target !== null && typeof target.scrollIntoView === "function") {
       target.scrollIntoView({ block: "start" });
     }
-  }, [activeQuestion.code, completionVisible]);
+  }, [activeQuestion.code, completionVisible, contentFocusRequest]);
 
   function navigateToQuestion(questionIndex: number) {
     const question = catalog.questions[questionIndex];
@@ -172,16 +172,20 @@ export function Examination({ catalog }: ExaminationProps) {
       return;
     }
 
-    focusContentAfterNavigation.current = true;
+    setContentFocusRequest((current) => current + 1);
     setCompletionVisible(false);
     setOpenCriteriaHelpCode(null);
     setClearConfirmationVisible(false);
     setCompletionClearConfirmationVisible(false);
     setClearSuccessVisible(false);
-    setState((current) => ({
-      ...current,
-      activeQuestionCode: question.code,
-    }));
+    setState((current) =>
+      current.activeQuestionCode === question.code
+        ? current
+        : {
+            ...current,
+            activeQuestionCode: question.code,
+          },
+    );
   }
 
   function handleSelection(optionCode: string) {
@@ -208,17 +212,18 @@ export function Examination({ catalog }: ExaminationProps) {
   }
 
   function handleClearSession() {
-    focusContentAfterNavigation.current = true;
-    clearSession();
+    setContentFocusRequest((current) => current + 1);
+    const result = clearSession();
     setCompletionVisible(false);
     setOpenCriteriaHelpCode(null);
     setClearConfirmationVisible(false);
     setCompletionClearConfirmationVisible(false);
-    setClearSuccessVisible(true);
+    setClearSuccessVisible(result.status === "cleared");
+    setClearFailureVisible(result.status === "failed");
   }
 
   function showCompletion() {
-    focusContentAfterNavigation.current = true;
+    setContentFocusRequest((current) => current + 1);
     setOpenCriteriaHelpCode(null);
     setClearConfirmationVisible(false);
     setCompletionClearConfirmationVisible(false);
@@ -227,7 +232,7 @@ export function Examination({ catalog }: ExaminationProps) {
   }
 
   const progressPercentage =
-    ((activeQuestionIndex + 1) / catalog.questions.length) * 100;
+    (answeredCount / catalog.questions.length) * 100;
 
   return (
     <div className="examination-layout">
@@ -253,10 +258,10 @@ export function Examination({ catalog }: ExaminationProps) {
         </div>
 
         <div
-          aria-label={`${activeQuestionIndex + 1} de ${catalog.questions.length} etapas`}
+          aria-label={`${answeredCount} de ${catalog.questions.length} seções com opção marcada`}
           aria-valuemax={catalog.questions.length}
-          aria-valuemin={1}
-          aria-valuenow={activeQuestionIndex + 1}
+          aria-valuemin={0}
+          aria-valuenow={answeredCount}
           className="progress-track"
           role="progressbar"
         >
@@ -290,6 +295,12 @@ export function Examination({ catalog }: ExaminationProps) {
             </div>
           </div>
         ) : null}
+        {clearFailureVisible ? (
+          <div className="clear-confirmation" role="alertdialog" aria-modal="true" aria-label="Não foi possível confirmar a limpeza">
+            <p>Não foi possível confirmar a limpeza dos dados armazenados pelo navegador. Limpe os dados deste site nas configurações do navegador e recarregue a aplicação.</p>
+            <button className="primary-button" onClick={() => window.location.reload()} type="button">Recarregar aplicação</button>
+          </div>
+        ) : null}
 
         <div className="progress-desktop-details">
           <nav aria-label="Seções do exame">
@@ -302,29 +313,74 @@ export function Examination({ catalog }: ExaminationProps) {
 
                 return (
                   <li key={question.code}>
-                    <button
-                      aria-current={active ? "step" : undefined}
-                      className={active ? "section-link section-link--active" : "section-link"}
-                      onClick={() => {
-                        navigateToQuestion(questionIndex);
-                      }}
-                      type="button"
-                    >
-                      <span className="section-link-number">
-                        {String(questionIndex + 1).padStart(2, "0")}
-                      </span>
-                      <span className="section-link-copy">
-                        <span>{parts.title}</span>
-                        <small>{answered ? "Revisado" : "Não revisado"}</small>
-                      </span>
-                      <span
-                        aria-label={answered ? "Revisado" : "Não revisado"}
-                        className={answered ? "section-status section-status--answered" : "section-status"}
-                        role="img"
+                    <div className="section-navigation-item">
+                      <button
+                        aria-current={active ? "step" : undefined}
+                        className={
+                          active
+                            ? "section-link section-link--active"
+                            : "section-link"
+                        }
+                        onClick={() => {
+                          navigateToQuestion(questionIndex);
+                        }}
+                        type="button"
                       >
-                        {answered ? "✓" : "○"}
-                      </span>
-                    </button>
+                        <span className="section-link-number">
+                          {String(questionIndex + 1).padStart(2, "0")}
+                        </span>
+                        <span className="section-link-copy">
+                          <span>{parts.title}</span>
+                          <small>{answered ? "Revisado" : "Não revisado"}</small>
+                        </span>
+                        <span
+                          aria-label={answered ? "Revisado" : "Não revisado"}
+                          className={
+                            answered
+                              ? "section-status section-status--answered"
+                              : "section-status"
+                          }
+                          role="img"
+                        >
+                          {answered ? "✓" : "○"}
+                        </span>
+                      </button>
+                      {active && !completionVisible ? (
+                        <button
+                          aria-label={
+                            questionIndex === catalog.questions.length - 1
+                              ? "Abrir a lista para a confissão"
+                              : "Avançar para a próxima seção"
+                          }
+                          className="section-next-button"
+                          onClick={() => {
+                            if (
+                              questionIndex ===
+                              catalog.questions.length - 1
+                            ) {
+                              showCompletion();
+                            } else {
+                              navigateToQuestion(questionIndex + 1);
+                            }
+                          }}
+                          type="button"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              d="M5 12h14m-6-6 6 6-6 6"
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                            />
+                          </svg>
+                        </button>
+                      ) : null}
+                    </div>
                   </li>
                 );
               })}
@@ -363,9 +419,17 @@ export function Examination({ catalog }: ExaminationProps) {
                   {confessionSections.map((section) => (
                     <section key={section.code}>
                       <h3>{section.title}</h3>
-                      <ul>
+                      <ul role="list">
                         {section.entries.map((entry) => (
-                          <li key={entry.optionCode}>{entry.text}</li>
+                          <li key={entry.optionCode}>
+                            <span
+                              aria-hidden="true"
+                              className="confession-list-check"
+                            >
+                              ✓
+                            </span>
+                            <span>{entry.text}</span>
+                          </li>
                         ))}
                       </ul>
                     </section>
@@ -383,6 +447,19 @@ export function Examination({ catalog }: ExaminationProps) {
               </p>
             </div>
             <div className="completion-actions">
+              <button
+                className="secondary-button"
+                onClick={() => {
+                  void navigator.clipboard?.writeText(
+                    confessionSections
+                      .flatMap((section) => [section.title, ...section.entries.map((entry) => entry.text)])
+                      .join("\n"),
+                  );
+                }}
+                type="button"
+              >
+                Copiar lista
+              </button>
               <button
                 className="secondary-button"
                 onClick={() => {
@@ -454,11 +531,7 @@ export function Examination({ catalog }: ExaminationProps) {
               <p className="question-prompt">{activeQuestion.prompt}</p>
               <p className="question-help">{activeQuestion.helpText}</p>
 
-              {activeQuestion.options.some(
-                (option) =>
-                  option.responseKind === "affirmation" &&
-                  option.startsMortalSinAssessment,
-              ) ? (
+              {
                 <MortalSinCriteriaDisclosure
                   compact={state.compactCriteriaHelp}
                   disclosureId={`${activeQuestion.code}-mortal-sin-criteria`}
@@ -480,7 +553,7 @@ export function Examination({ catalog }: ExaminationProps) {
                   }}
                   source={mortalSinCatechismSource}
                 />
-              ) : null}
+              }
 
               <div className="option-list">
                 {activeQuestion.options.map((option) => {
@@ -522,7 +595,7 @@ export function Examination({ catalog }: ExaminationProps) {
                 }}
                 type="button"
               >
-                ← Voltar
+                Voltar
               </button>
               <span>
                 {selectedCodes.length > 0
@@ -542,7 +615,7 @@ export function Examination({ catalog }: ExaminationProps) {
               >
                 {activeQuestionIndex === catalog.questions.length - 1
                   ? "Ver lista para a confissão"
-                  : "Continuar →"}
+                  : "Continuar"}
               </button>
             </nav>
           </>

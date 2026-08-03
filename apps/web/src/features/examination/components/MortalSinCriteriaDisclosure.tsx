@@ -1,7 +1,8 @@
-import type { DraftExaminationCatalogPreview } from "@addiopeccati/contracts";
+import type { CurrentExaminationCatalog } from "@addiopeccati/contracts";
+import { useRef } from "react";
 
 type DoctrinalSource =
-  DraftExaminationCatalogPreview["doctrinalSources"][number];
+  CurrentExaminationCatalog["doctrinalSources"][number];
 
 export interface MortalSinCriteriaDisclosureProps {
   compact: boolean;
@@ -22,6 +23,13 @@ export function MortalSinCriteriaDisclosure({
   onToggle,
   source,
 }: MortalSinCriteriaDisclosureProps) {
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  function closeDisclosure() {
+    onToggle();
+    triggerRef.current?.focus();
+  }
+
   return (
     <div
       className={`mortal-sin-help${compact ? " mortal-sin-help--compact" : ""}`}
@@ -37,6 +45,7 @@ export function MortalSinCriteriaDisclosure({
           }
           className="mortal-sin-help-trigger"
           onClick={onToggle}
+          ref={triggerRef}
           type="button"
         >
           <span className="mortal-sin-help-icon" aria-hidden="true">
@@ -54,7 +63,7 @@ export function MortalSinCriteriaDisclosure({
           )}
         </button>
 
-        {compact ? null : (
+        {compact || isOpen ? null : (
           <button
             aria-label="Mostrar apenas o ícone de ajuda em todos os mandamentos"
             className="mortal-sin-help-compact-button"
@@ -68,15 +77,37 @@ export function MortalSinCriteriaDisclosure({
       </div>
 
       <div
+        aria-labelledby={`${disclosureId}-title`}
         className="mortal-sin-help-panel"
         hidden={!isOpen}
         id={disclosureId}
+        role="region"
       >
-        <p className="mortal-sin-help-eyebrow">Catecismo da Igreja Católica</p>
-        <h3>Quando um pecado é mortal?</h3>
+        <div className="mortal-sin-help-panel-header">
+          <p className="mortal-sin-help-eyebrow">
+            Catecismo da Igreja Católica
+          </p>
+          <button
+            aria-controls={disclosureId}
+            aria-label="Fechar explicação sobre pecado mortal"
+            className="mortal-sin-help-close"
+            onClick={closeDisclosure}
+            type="button"
+          >
+            <svg aria-hidden="true" fill="none" viewBox="0 0 24 24">
+              <path
+                d="m7 7 10 10M17 7 7 17"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeWidth="2"
+              />
+            </svg>
+          </button>
+        </div>
+        <h3 id={`${disclosureId}-title`}>Quando um pecado é mortal?</h3>
         <blockquote>
-          “Para que um pecado seja mortal, requerem-se, em simultâneo, três
-          condições.”
+          Para que um pecado seja mortal, requerem-se, em simultâneo, três
+          condições.
         </blockquote>
 
         <ol className="mortal-sin-criteria-list">
@@ -128,7 +159,6 @@ export function MortalSinCriteriaDisclosure({
             target="_blank"
           >
             Fonte oficial: {source.document}, §§ {source.locator}
-            <span aria-hidden="true"> ↗</span>
             <span className="visually-hidden"> (abre em nova aba)</span>
           </a>
         )}
